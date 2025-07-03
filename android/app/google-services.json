@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161351227645",
+    "project_id": "flutterboilerplate-7924d",
+    "storage_bucket": "flutterboilerplate-7924d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161351227645:android:98c352217cf5647c3dc694",
+        "android_client_info": {
+          "package_name": "com.gamatecha.flutterboilerplate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpiNFCoBOE9nr0WBu5xp3RJ-7vuWJubzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
