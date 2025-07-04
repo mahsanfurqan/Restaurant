@@ -92,6 +92,21 @@ abstract class AppLocalizations {
   static String restaurantNamePlaceholder() => 'restaurantNamePlaceholder'.tr;
   static String menu() => 'menu'.tr;
   static String pengaturan() => 'pengaturan'.tr;
+  static String addMenu() => 'addMenu'.tr;
+  static String menuName() => 'menuName'.tr;
+  static String menuNameRequired() => 'menuNameRequired'.tr;
+  static String category() => 'category'.tr;
+  static String categoryRequired() => 'categoryRequired'.tr;
+  static String descriptionOptional() => 'descriptionOptional'.tr;
+  static String price() => 'price'.tr;
+  static String priceRequired() => 'priceRequired'.tr;
+  static String priceMustBeNumber() => 'priceMustBeNumber'.tr;
+  static String imageRequired() => 'imageRequired'.tr;
+  static String categoryFood() => 'categoryFood'.tr;
+  static String categoryDrink() => 'categoryDrink'.tr;
+  static String menuNasiGoreng() => 'menuNasiGoreng'.tr;
+  static String menuMatcha() => 'menuMatcha'.tr;
+  static String description() => 'description'.tr;
 
   static String passwordMinCharacterMessage(int min) =>
       'passwordMinCharacterMessage'.trParams({
@@ -103,4 +118,19 @@ abstract class AppLocalizations {
         'appName': appName,
         'permissionType': permissionType,
       });
+
+  static String settingsTitle() => 'settingsTitle'.tr;
+  static String preferencesTitle() => 'preferencesTitle'.tr;
+  static String themeTitle() => 'themeTitle'.tr;
+  static String themeSubtitle() => 'themeSubtitle'.tr;
+  static String languageTitle() => 'languageTitle'.tr;
+  static String languageSubtitle() => 'languageSubtitle'.tr;
+  static String accountTitle() => 'accountTitle'.tr;
+  static String restaurantSettingTitle() => 'restaurantSettingTitle'.tr;
+  static String restaurantSettingSubtitle() => 'restaurantSettingSubtitle'.tr;
+  static String bahasaIndonesia() => 'bahasaIndonesia'.tr;
+  static String english() => 'english'.tr;
+  static String lihatMenuTitle() => 'lihatMenuTitle'.tr;
+  static String descNasiGoreng() => 'descNasiGoreng'.tr;
+  static String descMatcha() => 'descMatcha'.tr;
 }

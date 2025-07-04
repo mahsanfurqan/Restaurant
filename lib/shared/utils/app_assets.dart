@@ -13,6 +13,8 @@ class AppImages {
 
   String get idFlag => 'assets/images/id_flag.png';
   String get enFlag => 'assets/images/en_flag.png';
+  String get nasiGoreng => 'assets/images/nasigoreng.jpg';
+  String get matcha => 'assets/images/matcha.jpg';
 }
 
 class AppPngIcons {

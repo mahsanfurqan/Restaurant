@@ -11,6 +11,8 @@ abstract class AppRoutes {
   static const displayMode = _Paths.displayMode;
   static const String register = '/register';
   static const String lihatMenu = '/lihat_menu';
+  static const String tambahMenu = '/tambah-menu';
+  static const String pengaturan = '/pengaturan';
 }
 
 abstract class _Paths {
@@ -22,4 +24,6 @@ abstract class _Paths {
   static const login = '/login';
   static const chat = '/chat';
   static const displayMode = '/display-mode';
+  static const tambahMenu = '/tambah-menu';
+  static const pengaturan = '/pengaturan';
 }

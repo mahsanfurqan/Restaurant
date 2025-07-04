@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/login_dto.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/token_model.dart';
 import 'package:flutter_boilerplate/modules/auth/data/repositories/auth_repository.dart';
+import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_controller.dart';
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:get/get.dart';
@@ -55,5 +56,8 @@ class LoginController extends GetxController {
     );
     loginState.value = ResultState.success(token);
     onSuccess?.call(token);
+
+    final authCtrl = Get.find<AuthController>();
+    authCtrl.setLoggedInUsername(username);
   }
 }

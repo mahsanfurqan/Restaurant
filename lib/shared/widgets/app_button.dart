@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/utils/app_enums.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AppButton extends StatelessWidget {
@@ -17,6 +17,11 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final bool enabled;
   final double? radius;
+  final MainAxisAlignment? alignment;
+  final TextStyle? textStyle;
+  final double? textSize;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
 
   const AppButton({
     super.key,
@@ -29,6 +34,11 @@ class AppButton extends StatelessWidget {
     this.backgroundColor,
     this.enabled = true,
     this.radius,
+    this.alignment,
+    this.textStyle,
+    this.textSize,
+    this.prefixIcon,
+    this.suffixIcon,
   })  : _type = AppButtonType.primary,
         borderColor = null,
         borderWidth = null;
@@ -45,6 +55,11 @@ class AppButton extends StatelessWidget {
     this.borderColor,
     this.enabled = true,
     this.radius,
+    this.alignment,
+    this.textStyle,
+    this.textSize,
+    this.prefixIcon,
+    this.suffixIcon,
   })  : _type = AppButtonType.outlined,
         backgroundColor = null;
 
@@ -58,6 +73,11 @@ class AppButton extends StatelessWidget {
     this.textColor,
     this.enabled = true,
     this.radius,
+    this.alignment,
+    this.textStyle,
+    this.textSize,
+    this.prefixIcon,
+    this.suffixIcon,
   })  : _type = AppButtonType.text,
         backgroundColor = null,
         borderColor = null,
@@ -75,6 +95,7 @@ class AppButton extends StatelessWidget {
   Widget _defaultButton(BuildContext context) {
     final theme = context.theme;
     final colorScheme = theme.colorScheme;
+
     return SizedBox(
       width: width ?? context.mediaQuerySize.width,
       height: height ?? 45,
@@ -99,11 +120,30 @@ class AppButton extends StatelessWidget {
               ),
             ),
           ),
-          child: Text(
-            text,
-            style: AppFonts.mdSemiBold.copyWith(
-              color: textColor ?? colorScheme.onPrimary,
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment:
+                (alignment != null) ? alignment! : MainAxisAlignment.center,
+            children: [
+              if (prefixIcon != null) ...[
+                prefixIcon!,
+                if (text.isNotEmpty) const SizedBox(width: 8),
+              ],
+              if (text.isNotEmpty)
+                Text(
+                  text,
+                  style: (textStyle ?? AppFonts.mdMedium).copyWith(
+                    fontSize: textSize,
+                    color: enabled
+                        ? textColor ?? colorScheme.onPrimary
+                        : theme.disabledColor,
+                  ),
+                ),
+              if (suffixIcon != null) ...[
+                if (text.isNotEmpty) const SizedBox(width: 8),
+                suffixIcon!,
+              ],
+            ],
           ),
         ),
       ),
@@ -113,9 +153,10 @@ class AppButton extends StatelessWidget {
   Widget _outlinedButton(BuildContext context) {
     final theme = context.theme;
     final colorScheme = theme.colorScheme;
+
     return SizedBox(
       width: width ?? context.mediaQuerySize.width,
-      height: 45,
+      height: height ?? 45,
       child: OutlinedButton(
         onPressed: (!enabled || isLoading) ? null : onPressed,
         style: ElevatedButton.styleFrom(
@@ -140,11 +181,30 @@ class AppButton extends StatelessWidget {
               ),
             ),
           ),
-          child: Text(
-            text,
-            style: AppFonts.mdSemiBold.copyWith(
-              color: textColor ?? colorScheme.primary,
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment:
+                (alignment != null) ? alignment! : MainAxisAlignment.center,
+            children: [
+              if (prefixIcon != null) ...[
+                prefixIcon!,
+                if (text.isNotEmpty) const SizedBox(width: 8),
+              ],
+              if (text.isNotEmpty)
+                Text(
+                  text,
+                  style: (textStyle ?? AppFonts.mdMedium).copyWith(
+                    fontSize: textSize,
+                    color: enabled
+                        ? textColor ?? colorScheme.primary
+                        : theme.disabledColor,
+                  ),
+                ),
+              if (suffixIcon != null) ...[
+                if (text.isNotEmpty) const SizedBox(width: 8),
+                suffixIcon!,
+              ],
+            ],
           ),
         ),
       ),
@@ -156,7 +216,7 @@ class AppButton extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     return SizedBox(
       width: width ?? context.mediaQuerySize.width,
-      height: 45,
+      height: height ?? 45,
       child: TextButton(
         onPressed: (!enabled || isLoading) ? null : onPressed,
         style: TextButton.styleFrom(
@@ -177,11 +237,30 @@ class AppButton extends StatelessWidget {
               ),
             ),
           ),
-          child: Text(
-            text,
-            style: AppFonts.mdSemiBold.copyWith(
-              color: textColor ?? colorScheme.primary,
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment:
+                (alignment != null) ? alignment! : MainAxisAlignment.center,
+            children: [
+              if (prefixIcon != null) ...[
+                prefixIcon!,
+                if (text.isNotEmpty) const SizedBox(width: 8),
+              ],
+              if (text.isNotEmpty)
+                Text(
+                  text,
+                  style: (textStyle ?? AppFonts.mdMedium).copyWith(
+                    fontSize: textSize,
+                    color: enabled
+                        ? textColor ?? colorScheme.onPrimary
+                        : theme.disabledColor,
+                  ),
+                ),
+              if (suffixIcon != null) ...[
+                if (text.isNotEmpty) const SizedBox(width: 8),
+                suffixIcon!,
+              ],
+            ],
           ),
         ),
       ),

@@ -9,6 +9,8 @@ import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:flutter_boilerplate/core/routes/app_pages.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
 import 'package:flutter_boilerplate/modules/localization/presentation/controllers/localization_controller.dart';
+import 'package:flutter_boilerplate/shared/dummy_data/dummy_user.dart';
+import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_controller.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -166,7 +168,14 @@ class RegisterPage extends StatelessWidget {
                                   onPressed: () {
                                     if (_formKey.currentState?.validate() ??
                                         false) {
-                                      // TODO: Implementasi pendaftaran user
+                                      // Tambahkan user baru ke dummyUsers
+                                      dummyUsers.add(DummyUser(
+                                        fullName: _fullNameCtrl.text.trim(),
+                                        restaurantName:
+                                            _restaurantNameCtrl.text.trim(),
+                                        username: _usernameCtrl.text.trim(),
+                                        password: _passwordCtrl.text.trim(),
+                                      ));
                                       Get.snackbar(AppLocalizations.success(),
                                           'Register success!');
                                       Get.offNamed(AppRoutes.login);

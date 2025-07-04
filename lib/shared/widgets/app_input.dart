@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_boilerplate/core/extensions/date_time_ext.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/utils/app_enums.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AppInput extends StatefulWidget {
   final AppInputType? _type;
@@ -21,6 +23,7 @@ class AppInput extends StatefulWidget {
   final double? height;
   final String? error;
   final Color? fillColor;
+  final List<TextInputFormatter>? inputFormatters;
 
   const AppInput({
     super.key,
@@ -38,6 +41,7 @@ class AppInput extends StatefulWidget {
     this.height,
     this.error,
     this.fillColor,
+    this.inputFormatters,
   }) : _type = AppInputType.normal;
 
   const AppInput.password({
@@ -56,6 +60,7 @@ class AppInput extends StatefulWidget {
     this.height,
     this.error,
     this.fillColor,
+    this.inputFormatters,
   }) : _type = AppInputType.password;
 
   const AppInput.textarea({
@@ -71,6 +76,7 @@ class AppInput extends StatefulWidget {
     this.width,
     this.error,
     this.fillColor,
+    this.inputFormatters,
   })  : _type = AppInputType.textarea,
         height = null,
         prefixIcon = null,
@@ -89,6 +95,7 @@ class AppInput extends StatefulWidget {
     this.height,
     this.error,
     this.fillColor,
+    this.inputFormatters,
   })  : _type = AppInputType.date,
         controller = null,
         suffixIcon = null,
@@ -107,6 +114,7 @@ class AppInput extends StatefulWidget {
     this.height,
     this.error,
     this.fillColor,
+    this.inputFormatters,
   })  : _type = AppInputType.time,
         controller = null,
         suffixIcon = null,
@@ -213,6 +221,7 @@ class _AppInputState extends State<AppInput> {
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.suffixIcon,
         ),
+        inputFormatters: widget.inputFormatters,
       ),
     );
   }
@@ -274,6 +283,7 @@ class _AppInputState extends State<AppInput> {
             ),
           ),
         ),
+        inputFormatters: widget.inputFormatters,
       ),
     );
   }
@@ -310,6 +320,7 @@ class _AppInputState extends State<AppInput> {
           contentPadding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
           prefix: const Padding(padding: EdgeInsets.only(left: 16)),
         ),
+        inputFormatters: widget.inputFormatters,
       ),
     );
   }
@@ -378,6 +389,7 @@ class _AppInputState extends State<AppInput> {
             ),
           ),
         ),
+        inputFormatters: widget.inputFormatters,
       ),
     );
   }
@@ -438,7 +450,33 @@ class _AppInputState extends State<AppInput> {
             ),
           ),
         ),
+        inputFormatters: widget.inputFormatters,
       ),
+    );
+  }
+}
+
+class CurrencyInputFormatter extends TextInputFormatter {
+  final NumberFormat _formatter = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp ',
+    decimalDigits: 0,
+  );
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Hapus semua karakter non-digit
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (newText.isEmpty) return newValue.copyWith(text: '');
+
+    // Format ke rupiah
+    String formatted = _formatter.format(int.parse(newText));
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

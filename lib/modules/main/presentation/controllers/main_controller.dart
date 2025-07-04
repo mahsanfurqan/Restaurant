@@ -6,6 +6,7 @@ class MainController extends GetxController {
   final pageCtrl = PageController();
 
   void changePage(int index) {
+    print('Change page to $index');
     currentPage.value = index;
     pageCtrl.jumpToPage(index);
   }

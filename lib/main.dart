@@ -61,7 +61,7 @@ class App extends StatelessWidget {
       builder: (_) {
         return Obx(
           () => GetMaterialApp(
-            title: 'Flutter Boilerplate',
+            title: 'Flutter Restaurant',
             getPages: AppPages.pages,
             translations: AppTranslations(),
             locale: localizationCtrl.currentLocale.value,

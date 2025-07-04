@@ -10,7 +10,12 @@ import 'package:flutter_boilerplate/modules/note/presentation/bindings/note_form
 import 'package:flutter_boilerplate/modules/note/presentation/pages/note_detail_page.dart';
 import 'package:flutter_boilerplate/modules/note/presentation/pages/note_form_page.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/pages/theme_page.dart';
-import 'package:flutter_boilerplate/modules/lihat_menu/lihat_menu_page.dart';
+import 'package:flutter_boilerplate/modules/lihat_menu/pages/lihat_menu_page.dart';
+import 'package:flutter_boilerplate/modules/tambah_menu/pages/tambah_menu_page.dart';
+import 'package:flutter_boilerplate/modules/tambah_menu/bindings/tambah_menu_binding.dart';
+import 'package:flutter_boilerplate/modules/lihat_menu/bindings/lihat_menu_binding.dart';
+import 'package:flutter_boilerplate/modules/pengaturan/pages/pengaturan_page.dart';
+import 'package:flutter_boilerplate/modules/pengaturan/bindings/pengaturan_binding.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -22,32 +27,32 @@ class AppPages {
 
   static final pages = [
     GetPage(
-      name: _Paths.main,
+      name: AppRoutes.main,
       page: () => const MainPage(),
       binding: MainBinding(),
     ),
     GetPage(
-      name: _Paths.login,
+      name: AppRoutes.login,
       page: () => const LoginPage(),
       binding: AuthBinding(),
     ),
     GetPage(
-      name: _Paths.noteDetail,
+      name: AppRoutes.noteDetail,
       page: () => const NoteDetailPage(),
       binding: NoteDetailBinding(),
     ),
     GetPage(
-      name: _Paths.noteForm,
+      name: AppRoutes.noteForm,
       page: () => const NoteFormPage(),
       binding: NoteFormBinding(),
     ),
     GetPage(
-      name: _Paths.chat,
+      name: AppRoutes.chat,
       page: () => const ChatPage(),
       binding: ChatBinding(),
     ),
     GetPage(
-      name: _Paths.displayMode,
+      name: AppRoutes.displayMode,
       page: () => const ThemePage(),
     ),
     GetPage(
@@ -57,6 +62,17 @@ class AppPages {
     GetPage(
       name: AppRoutes.lihatMenu,
       page: () => const LihatMenuPage(),
+      binding: LihatMenuBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tambahMenu,
+      page: () => TambahMenuPage(),
+      binding: TambahMenuBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.pengaturan,
+      page: () => PengaturanPage(),
+      binding: PengaturanBinding(),
     ),
   ];
 }

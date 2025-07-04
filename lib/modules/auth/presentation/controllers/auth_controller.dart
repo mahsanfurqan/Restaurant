@@ -16,6 +16,7 @@ class AuthController extends GetxController {
 
   final authState =
       Rx<ResultState<AuthValidateModel>>(const ResultState.initial());
+  final loggedInUsername = ''.obs;
 
   Future<void> authCheck() async {
     final result = await _repository.validateAuth();
@@ -24,5 +25,9 @@ class AuthController extends GetxController {
     }, (data) {
       authState.value = ResultState.success(data);
     });
+  }
+
+  void setLoggedInUsername(String username) {
+    loggedInUsername.value = username;
   }
 }

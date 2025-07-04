@@ -11,7 +11,7 @@ class AppColors {
   static const Color placeholder = Color(0xFFABABAB);
   static const Color blueA20 = Color(0x29FFFFFF);
   static const Color orange = Color(0xFFFFAB00);
-  static const Color green = Color(0xFF04A981);
+  static const Color green = Color(0xFF00BFA5);
 
   static const Color error = Color(0xFFDD2419);
   static const Color warning = Color(0xFFFFAB00);
