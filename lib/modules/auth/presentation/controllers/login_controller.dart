@@ -6,7 +6,6 @@ import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_c
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:get/get.dart';
-import 'package:flutter_boilerplate/shared/dummy_data/dummy_user.dart';
 
 class LoginController extends GetxController {
   final AuthRepository _repository;
@@ -15,14 +14,14 @@ class LoginController extends GetxController {
 
   @override
   void dispose() {
-    unameCtrl.dispose();
+    emailCtrl.dispose();
     passCtrl.dispose();
     super.dispose();
   }
 
   final formKey = GlobalKey<FormState>();
 
-  final unameCtrl = TextEditingController();
+  final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
   final loginState = Rx<ResultState<TokenModel>>(const ResultState.initial());
@@ -34,30 +33,36 @@ class LoginController extends GetxController {
     if (formKey.currentState?.validate() == false) return;
     loginState.value = const ResultState.loading();
 
-    final username = unameCtrl.text.trim();
+    final email = emailCtrl.text.trim();
     final password = passCtrl.text.trim();
 
-    final user = dummyUsers.firstWhereOrNull(
-      (u) => u.username == username && u.password == password,
+    final result =
+        await _repository.login(LoginDto(email: email, password: password));
+    result.fold(
+      (failure) {
+        loginState.value = ResultState.failed(failure.message);
+        onFailed?.call(failure.message ?? 'Login gagal');
+      },
+      (token) async {
+        loginState.value = ResultState.success(token);
+        onSuccess?.call(token);
+        final authCtrl = Get.find<AuthController>();
+        authCtrl.setLoggedInUsername(email);
+
+        // Create auth session from token since validateAuth endpoint doesn't exist
+        final authResult = await _repository.createAuthFromToken();
+        authResult.fold(
+          (failure) {
+            print('DEBUG: Failed to create auth session: ${failure.message}');
+            // Still consider login successful, just update auth state
+            authCtrl.authState.value = const ResultState.failed();
+          },
+          (authData) {
+            print('DEBUG: Auth session created successfully: ${authData.id}');
+            authCtrl.authState.value = ResultState.success(authData);
+          },
+        );
+      },
     );
-
-    await Future.delayed(const Duration(seconds: 1)); // Simulasi loading
-
-    if (user == null) {
-      loginState.value = const ResultState.failed();
-      onFailed?.call('Username atau password salah');
-      return;
-    }
-
-    // Simulasi token dummy
-    final token = TokenModel(
-      accessToken: 'dummy_access_token',
-      refreshToken: 'dummy_refresh_token',
-    );
-    loginState.value = ResultState.success(token);
-    onSuccess?.call(token);
-
-    final authCtrl = Get.find<AuthController>();
-    authCtrl.setLoggedInUsername(username);
   }
 }

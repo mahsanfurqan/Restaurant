@@ -10,9 +10,10 @@ abstract class AppRoutes {
   static const chat = _Paths.chat;
   static const displayMode = _Paths.displayMode;
   static const String register = '/register';
-  static const String lihatMenu = '/lihat_menu';
-  static const String tambahMenu = '/tambah-menu';
-  static const String pengaturan = '/pengaturan';
+  static const String viewMenu = '/view_menu';
+  static const String addMenu = '/add-menu';
+  static const String settings = '/settings';
+  static const String splash = '/splash';
 }
 
 abstract class _Paths {
@@ -24,6 +25,7 @@ abstract class _Paths {
   static const login = '/login';
   static const chat = '/chat';
   static const displayMode = '/display-mode';
-  static const tambahMenu = '/tambah-menu';
-  static const pengaturan = '/pengaturan';
+  static const addMenu = '/add-menu';
+  static const settings = '/settings';
+  static const splash = '/splash';
 }

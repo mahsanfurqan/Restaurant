@@ -31,6 +31,9 @@ import 'package:flutter_boilerplate/shared/utils/app_constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_boilerplate/modules/menu/data/data_sources/remote/services/menu_service.dart';
+import 'package:flutter_boilerplate/modules/menu/data/data_sources/remote/menu_remote_data_source.dart';
+import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
 
 class AppBinding extends Bindings {
   @override
@@ -63,12 +66,14 @@ class AppBinding extends Bindings {
     Get.lazyPut<AuthService>(() => AuthService(Get.find()));
     Get.lazyPut<UserService>(() => UserService(Get.find()));
     Get.lazyPut<NoteService>(() => NoteService(Get.find()));
+    Get.lazyPut<MenuService>(() => MenuService(Get.find()));
 
     // Data Sources
     Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSource(Get.find()));
     Get.lazyPut<AuthLocalDataSource>(() => AuthLocalDataSource(Get.find()));
     Get.lazyPut<UserRemoteDataSource>(() => UserRemoteDataSource(Get.find()));
     Get.lazyPut<NoteRemoteDataSource>(() => NoteRemoteDataSource(Get.find()));
+    Get.lazyPut<MenuRemoteDataSource>(() => MenuRemoteDataSource(Get.find()));
     Get.lazyPut<NoteLocalDataSource>(
         () => NoteLocalDataSource(Get.find(), Get.find()));
     Get.lazyPut<SocketRemoteDataSource>(
@@ -81,12 +86,13 @@ class AppBinding extends Bindings {
     Get.put<AuthRepository>(
         AuthRepository(Get.find(), Get.find(), Get.find(), Get.find()));
     Get.put<NoteRepository>(NoteRepository(Get.find(), Get.find()));
+    Get.put<MenuRepository>(MenuRepository(Get.find()));
     Get.put<SocketRepository>(SocketRepository(Get.find()));
     Get.put<LocalizationRepository>(LocalizationRepository(Get.find()));
     Get.put<ThemeRepository>(ThemeRepository(Get.find()));
 
     // Controllers
-    Get.put<AuthController>(AuthController(Get.find()));
+    Get.lazyPut<AuthController>(() => AuthController(Get.find()));
     Get.put<ConnectivityController>(ConnectivityController(Get.find()));
     Get.put<ThemeController>(ThemeController(Get.find()));
     Get.put<LocalizationController>(LocalizationController(Get.find()));

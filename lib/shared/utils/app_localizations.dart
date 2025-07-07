@@ -89,7 +89,15 @@ abstract class AppLocalizations {
   static String fullName() => 'fullName'.tr;
   static String fullNamePlaceholder() => 'fullNamePlaceholder'.tr;
   static String restaurantName() => 'restaurantName'.tr;
+  static String restaurantAddress() => 'restaurantAddress'.tr;
+  static String restaurantDescription() => 'restaurantDescription'.tr;
+  static String restaurantPhone() => 'restaurantPhone'.tr;
   static String restaurantNamePlaceholder() => 'restaurantNamePlaceholder'.tr;
+  static String restaurantAddressPlaceholder() =>
+      'restaurantAddressPlaceholder'.tr;
+  static String restaurantDescriptionPlaceholder() =>
+      'restaurantDescriptionPlaceholder'.tr;
+  static String restaurantPhonePlaceholder() => 'restaurantPhonePlaceholder'.tr;
   static String menu() => 'menu'.tr;
   static String pengaturan() => 'pengaturan'.tr;
   static String addMenu() => 'addMenu'.tr;
@@ -133,4 +141,27 @@ abstract class AppLocalizations {
   static String lihatMenuTitle() => 'lihatMenuTitle'.tr;
   static String descNasiGoreng() => 'descNasiGoreng'.tr;
   static String descMatcha() => 'descMatcha'.tr;
+  static String edit() => 'edit'.tr;
+  static String deleteMenu() => 'deleteMenu'.tr;
+  static String deleteMenuConfirmation() => 'deleteMenuConfirmation'.tr;
+  static String deleteMenuSuccess() => 'deleteMenuSuccess'.tr;
+  static String deleteMenuFailed() => 'deleteMenuFailed'.tr;
+  static String editMenu() => 'editMenu'.tr;
+  static String menuNameLabel() => 'menuNameLabel'.tr;
+  static String categoryLabel() => 'categoryLabel'.tr;
+  static String priceLabel() => 'priceLabel'.tr;
+  static String descriptionLabel() => 'descriptionLabel'.tr;
+  static String menuNotFound() => 'menuNotFound'.tr;
+  static String errorOccurred() => 'errorOccurred'.tr;
+  static String editMenuSuccess() => 'editMenuSuccess'.tr;
+  static String editMenuFailed() => 'editMenuFailed'.tr;
+  static String email() => 'email'.tr;
+  static String emailPlaceholder() => 'emailPlaceholder'.tr;
+  static String emailRequiredMessage() => 'emailRequiredMessage'.tr;
+  static String emailInvalidMessage() => 'emailInvalidMessage'.tr;
+  static String registerUsername() => 'registerUsername'.tr;
+  static String registerUsernamePlaceholder() =>
+      'registerUsernamePlaceholder'.tr;
+  static String registerUsernameRequiredMessage() =>
+      'registerUsernameRequiredMessage'.tr;
 }

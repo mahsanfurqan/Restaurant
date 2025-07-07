@@ -50,12 +50,17 @@ class App extends StatelessWidget {
           }
         });
 
+        // Listen to auth state changes
         ever(authState, (value) {
+          print('DEBUG: App - Auth state changed: ${value.runtimeType}');
           if (value is ResultSuccess<AuthValidateModel>) {
+            print('DEBUG: App - User logged in, going to main');
             Get.offNamed(AppRoutes.main);
-          } else {
+          } else if (value is ResultFailed || value is ResultInitial) {
+            print('DEBUG: App - User not logged in, going to login');
             Get.offNamed(AppRoutes.login);
           }
+          // Don't redirect if still loading
         });
       },
       builder: (_) {
@@ -66,7 +71,7 @@ class App extends StatelessWidget {
             translations: AppTranslations(),
             locale: localizationCtrl.currentLocale.value,
             fallbackLocale: localizationCtrl.currentLocale.value,
-            initialRoute: AppPages.initial,
+            initialRoute: AppRoutes.login,
             themeMode: themeCtrl.currentThemeMode.value,
             theme: AppThemes.lightTheme,
             darkTheme: AppThemes.darkTheme,

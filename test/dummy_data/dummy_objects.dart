@@ -13,22 +13,24 @@ import 'package:flutter_boilerplate/shared/responses/error_detail_response.dart'
 import 'package:flutter_boilerplate/shared/responses/meta_response.dart';
 
 const tTokenJson = {
+  'email': 'test@example.com',
   'refreshToken': 'refreshToken',
   'accessToken': 'accessToken',
 };
 
 const tTokenModel = TokenModel(
+  email: 'test@example.com',
   refreshToken: 'refreshToken',
   accessToken: 'accessToken',
 );
 
 const tLoginDtoJson = {
-  'username': 'username',
+  'email': 'test@example.com',
   'password': 'password',
 };
 
 const tLoginDto = LoginDto(
-  username: 'username',
+  email: 'test@example.com',
   password: 'password',
 );
 

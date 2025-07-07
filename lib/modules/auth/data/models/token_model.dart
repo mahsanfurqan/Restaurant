@@ -6,6 +6,7 @@ part 'generated/token_model.g.dart';
 @Freezed()
 class TokenModel with _$TokenModel {
   const factory TokenModel({
+    required String email,
     required String accessToken,
     required String refreshToken,
   }) = _TokenModel;

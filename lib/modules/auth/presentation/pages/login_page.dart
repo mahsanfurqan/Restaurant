@@ -115,18 +115,24 @@ class LoginPage extends GetView<LoginController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      AppLocalizations.username(),
+                                      AppLocalizations.email(),
                                       style: AppFonts.mdSemiBold,
                                     ),
                                     const SizedBox(height: 8),
                                     AppInput(
-                                      controller: controller.unameCtrl,
-                                      hintText: AppLocalizations
-                                          .usernamePlaceholder(),
-                                      validator: FormBuilderValidators.required(
-                                        errorText: AppLocalizations
-                                            .usernameRequiredMessage(),
-                                      ),
+                                      controller: controller.emailCtrl,
+                                      hintText:
+                                          AppLocalizations.emailPlaceholder(),
+                                      validator: FormBuilderValidators.compose([
+                                        FormBuilderValidators.required(
+                                          errorText: AppLocalizations
+                                              .emailRequiredMessage(),
+                                        ),
+                                        FormBuilderValidators.email(
+                                          errorText: AppLocalizations
+                                              .emailInvalidMessage(),
+                                        ),
+                                      ]),
                                     ),
                                   ],
                                 ),
@@ -159,8 +165,8 @@ class LoginPage extends GetView<LoginController> {
                                         }
                                       },
                                       onSuccess: (_) async {
-                                        Get.offNamed(AppRoutes.lihatMenu);
-                                        await authCtrl.authCheck();
+                                        // Middleware will handle redirect automatically
+                                        // No need for manual redirect here
                                       },
                                     ),
                                     text: AppLocalizations.login(),

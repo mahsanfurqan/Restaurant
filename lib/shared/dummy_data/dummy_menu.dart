@@ -1,20 +1,28 @@
-import 'package:flutter_boilerplate/shared/models/menu_model.dart';
-
-final List<MenuModel> dummyMenuList = [
-  MenuModel(
-    id: '1',
-    name: 'menuNasiGoreng',
-    imageUrl: 'assets/images/nasigoreng.jpg',
-    price: 15000,
-    kategori: 'categoryFood',
-    description: 'descNasiGoreng',
-  ),
-  MenuModel(
-    id: '2',
-    name: 'menuMatcha',
-    imageUrl: 'assets/images/matcha.jpg',
-    price: 12000,
-    kategori: 'categoryDrink',
-    description: 'descMatcha',
-  ),
+final List<Map<String, dynamic>> dummyMenuList = [
+  {
+    'id': '1',
+    'name': 'menuNasiGoreng',
+    'description': 'descNasiGoreng',
+    'price': '15000',
+    'createdAt': '2024-01-01T00:00:00Z',
+    'isAvailable': true,
+    'categories': {
+      'id': '1',
+      'name': 'categoryFood',
+    },
+    'imageUrl': 'assets/images/nasigoreng.jpg',
+  },
+  {
+    'id': '2',
+    'name': 'menuMatcha',
+    'description': 'descMatcha',
+    'price': '12000',
+    'createdAt': '2024-01-01T00:00:00Z',
+    'isAvailable': true,
+    'categories': {
+      'id': '2',
+      'name': 'categoryDrink',
+    },
+    'imageUrl': 'assets/images/matcha.jpg',
+  },
 ];

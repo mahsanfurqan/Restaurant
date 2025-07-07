@@ -51,7 +51,7 @@ class TokenInterceptor extends Interceptor {
 
     try {
       final payload = {'refreshToken': refreshToken};
-      final response = await _dio.post('/auths/refresh', data: payload);
+      final response = await _dio.post('/auth/refresh-token', data: payload);
 
       final newTokens = TokenModel.fromJson(response.data['data']);
       await _storeNewTokens(newTokens);
@@ -68,11 +68,18 @@ class TokenInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final accessToken = await _secureStorage.read(
-      key: AppConstants.secureStorageKeys.accessToken,
-    );
-    if (accessToken?.isNotEmpty == true) {
-      options.headers['Authorization'] = 'Bearer $accessToken';
+    // Skip adding Authorization header for auth endpoints
+    final isAuthEndpoint = options.uri.path.contains('/auth/login') ||
+        options.uri.path.contains('/auth/register') ||
+        options.uri.path.contains('/auth/refresh-token');
+
+    if (!isAuthEndpoint) {
+      final accessToken = await _secureStorage.read(
+        key: AppConstants.secureStorageKeys.accessToken,
+      );
+      if (accessToken?.isNotEmpty == true) {
+        options.headers['Authorization'] = 'Bearer $accessToken';
+      }
     }
     super.onRequest(options, handler);
   }

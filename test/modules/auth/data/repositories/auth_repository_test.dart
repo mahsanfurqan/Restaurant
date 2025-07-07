@@ -174,7 +174,7 @@ void main() {
         () async {
       // Arrange
       when(mockRemoteDataSource.login(tLoginDto))
-          .thenAnswer((_) async => const BaseResponse(data: tTokenModel));
+          .thenAnswer((_) async => tTokenModel);
       when(mockLocalDataSource.setToken(tTokenModel))
           .thenAnswer((_) async => true);
       // Act

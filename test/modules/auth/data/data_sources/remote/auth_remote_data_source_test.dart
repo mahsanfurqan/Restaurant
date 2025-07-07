@@ -1,4 +1,5 @@
 import 'package:flutter_boilerplate/modules/auth/data/data_sources/remote/auth_remote_data_source.dart';
+import 'package:flutter_boilerplate/modules/auth/data/models/login_response_model.dart';
 import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -19,12 +20,12 @@ void main() {
     test('should return access token and refresh token when success', () async {
       // Arrange
       when(mockAuthService.login(tLoginDto)).thenAnswer(
-        (_) async => BaseResponse(data: tTokenModel),
+        (_) async => LoginResponseModel(data: tTokenModel),
       );
       // Act
       final result = await dataSource.login(tLoginDto);
       // Assert
-      expect(result, BaseResponse(data: tTokenModel));
+      expect(result, tTokenModel);
     });
   });
 

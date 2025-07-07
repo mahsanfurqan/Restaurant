@@ -1,6 +1,7 @@
 import 'package:flutter_boilerplate/modules/auth/presentation/bindings/auth_binding.dart';
 import 'package:flutter_boilerplate/modules/auth/presentation/pages/login_page.dart';
 import 'package:flutter_boilerplate/modules/auth/presentation/pages/register_page.dart';
+import 'package:flutter_boilerplate/modules/auth/presentation/pages/splash_page.dart';
 import 'package:flutter_boilerplate/modules/chat/presentation/bindings/chat_binding.dart';
 import 'package:flutter_boilerplate/modules/chat/presentation/pages/chat_page.dart';
 import 'package:flutter_boilerplate/modules/main/presentation/bindings/main_binding.dart';
@@ -10,12 +11,12 @@ import 'package:flutter_boilerplate/modules/note/presentation/bindings/note_form
 import 'package:flutter_boilerplate/modules/note/presentation/pages/note_detail_page.dart';
 import 'package:flutter_boilerplate/modules/note/presentation/pages/note_form_page.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/pages/theme_page.dart';
-import 'package:flutter_boilerplate/modules/lihat_menu/pages/lihat_menu_page.dart';
-import 'package:flutter_boilerplate/modules/tambah_menu/pages/tambah_menu_page.dart';
-import 'package:flutter_boilerplate/modules/tambah_menu/bindings/tambah_menu_binding.dart';
-import 'package:flutter_boilerplate/modules/lihat_menu/bindings/lihat_menu_binding.dart';
-import 'package:flutter_boilerplate/modules/pengaturan/pages/pengaturan_page.dart';
-import 'package:flutter_boilerplate/modules/pengaturan/bindings/pengaturan_binding.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/pages/view_menu_page.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/pages/add_menu_page.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/bindings/add_menu_binding.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/bindings/view_menu_binding.dart';
+import 'package:flutter_boilerplate/modules/settings/pages/settings_page.dart';
+import 'package:flutter_boilerplate/modules/settings/controllers/settings_controller.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -27,6 +28,10 @@ class AppPages {
 
   static final pages = [
     GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashPage(),
+    ),
+    GetPage(
       name: AppRoutes.main,
       page: () => const MainPage(),
       binding: MainBinding(),
@@ -35,6 +40,10 @@ class AppPages {
       name: AppRoutes.login,
       page: () => const LoginPage(),
       binding: AuthBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.register,
+      page: () => RegisterPage(),
     ),
     GetPage(
       name: AppRoutes.noteDetail,
@@ -56,23 +65,21 @@ class AppPages {
       page: () => const ThemePage(),
     ),
     GetPage(
-      name: AppRoutes.register,
-      page: () => RegisterPage(),
+      name: AppRoutes.viewMenu,
+      page: () => const ViewMenuPage(),
+      binding: ViewMenuBinding(),
     ),
     GetPage(
-      name: AppRoutes.lihatMenu,
-      page: () => const LihatMenuPage(),
-      binding: LihatMenuBinding(),
+      name: AppRoutes.addMenu,
+      page: () => AddMenuPage(),
+      binding: AddMenuBinding(),
     ),
     GetPage(
-      name: AppRoutes.tambahMenu,
-      page: () => TambahMenuPage(),
-      binding: TambahMenuBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.pengaturan,
-      page: () => PengaturanPage(),
-      binding: PengaturanBinding(),
+      name: AppRoutes.settings,
+      page: () => SettingsPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<SettingsController>(() => SettingsController());
+      }),
     ),
   ];
 }
