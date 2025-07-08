@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
-import 'package:flutter_boilerplate/shared/dummy_data/dummy_menu.dart';
-import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
+import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
 
 class DetailMenu extends StatelessWidget {
   final MenuModel menu;
@@ -132,24 +130,10 @@ class DetailMenu extends StatelessWidget {
                         const Center(child: CircularProgressIndicator()),
                   );
                   await Future.delayed(const Duration(seconds: 1));
-                  try {
-                    final idx =
-                        dummyMenuList.indexWhere((m) => m['id'] == menu.id);
-                    if (idx != -1) {
-                      dummyMenuList.removeAt(idx);
-                      Get.back();
-                      Get.back();
-                      Get.snackbar(AppLocalizations.success(),
-                          AppLocalizations.deleteMenuSuccess(),
-                          backgroundColor: Colors.green[100]);
-                      if (onEditSuccess != null) onEditSuccess!();
-                    }
-                  } catch (e) {
-                    Get.back();
-                    Get.snackbar(AppLocalizations.error(),
-                        AppLocalizations.deleteMenuFailed(),
-                        backgroundColor: Colors.red[100]);
-                  }
+                  Get.back(); // tutup loading
+                  Get.back(); // tutup bottomsheet
+                  await AlertDialogHelper.showDeleteMenuSuccess();
+                  if (onEditSuccess != null) onEditSuccess!();
                 }
               },
             ),
@@ -231,40 +215,17 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
       isLoading = true;
       errorMsg = null;
     });
-    await Future.delayed(const Duration(seconds: 1)); // Simulasi loading
+    await Future.delayed(const Duration(seconds: 1));
     try {
-      final idx = dummyMenuList.indexWhere((m) => m['id'] == widget.menu.id);
-      if (idx != -1) {
-        dummyMenuList[idx] = {
-          ...dummyMenuList[idx],
-          'name': nameCtrl.text.trim(),
-          'description': descCtrl.text.trim(),
-          'price': priceCtrl.text.trim(),
-          'categories': {
-            ...?dummyMenuList[idx]['categories'],
-            'name': kategori,
-          },
-        };
-        if (mounted) {
-          Get.snackbar(
-              AppLocalizations.success(), AppLocalizations.editMenuSuccess(),
-              backgroundColor: Colors.green[100]);
-          Get.back(result: true);
-        }
-      } else {
-        setState(() {
-          errorMsg = AppLocalizations.menuNotFound();
-        });
-        Get.snackbar(
-            AppLocalizations.error(), AppLocalizations.editMenuFailed(),
-            backgroundColor: Colors.red[100]);
+      if (mounted) {
+        await AlertDialogHelper.showEditMenuSuccess();
+        Get.back(result: true);
       }
     } catch (e) {
       setState(() {
         errorMsg = AppLocalizations.errorOccurred();
       });
-      Get.snackbar(AppLocalizations.error(), AppLocalizations.editMenuFailed(),
-          backgroundColor: Colors.red[100]);
+      await AlertDialogHelper.showEditMenuFailed();
     } finally {
       if (mounted) setState(() => isLoading = false);
     }

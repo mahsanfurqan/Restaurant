@@ -161,6 +161,9 @@ class AppTranslations extends Translations {
         'registerUsername': 'Username',
         'registerUsernamePlaceholder': 'Enter your username',
         'registerUsernameRequiredMessage': 'Username is required',
+        'createMenuSuccessMessage': 'Menu created successfully',
+        'logoutSuccess': 'Logout successful',
+        'logoutFailed': 'Logout failed',
       },
       'id': {
         'selectFromGallery': 'Pilih dari Galeri',
@@ -319,6 +322,9 @@ class AppTranslations extends Translations {
         'registerUsername': 'Username',
         'registerUsernamePlaceholder': 'Masukkan username anda',
         'registerUsernameRequiredMessage': 'Username wajib diisi',
+        'createMenuSuccessMessage': 'Menu berhasil dibuat',
+        'logoutSuccess': 'Berhasil logout',
+        'logoutFailed': 'Gagal logout',
       },
     };
   }

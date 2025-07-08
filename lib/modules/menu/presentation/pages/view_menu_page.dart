@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/routes/app_pages.dart';
-import 'package:flutter_boilerplate/modules/main/widgets/custom_navbar.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_button.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
@@ -42,7 +41,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                   DetailMenu(
                     menu: menu,
                     onEditSuccess: () {
-                      controller.fetchDummyMenus();
+                      controller.fetchMenus();
                     },
                   ),
                   isScrollControlled: true,

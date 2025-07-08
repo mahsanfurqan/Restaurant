@@ -11,20 +11,12 @@ part 'generated/menu_service.g.dart';
 abstract class MenuService {
   factory MenuService(Dio dio, {String? baseUrl}) = _MenuService;
 
-  @GET('/categories/{id}')
-  Future<BaseResponse<CategoryModel>> getCategoryById(@Path() int id);
+  @GET('/categories')
+  Future<BaseResponse<List<CategoryModel>>> getCategories();
 
   @POST('/menus')
   Future<MenuResponseModel> createMenu(@Body() MenuRequestModel body);
 
-  // @GET('/menus')
-  // Future<HttpResponse<Map<String, dynamic>>> getMenus({
-  //   @Query('page') int? page,
-  //   @Query('limit') int? limit,
-  //   @Query('orderBy') String? orderBy,
-  //   @Query('orderDirection') String? orderDirection,
-  //   @Query('search') String? search,
-  //   @Query('categoryId') String? categoryId,
-  //   @Query('isAvailable') bool? isAvailable,
-  // });
+  @GET('/menus')
+  Future<MenuListResponseModel> getMenus();
 }

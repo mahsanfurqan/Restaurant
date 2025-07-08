@@ -12,6 +12,7 @@ import 'package:flutter_boilerplate/modules/localization/presentation/controller
 import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_controller.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
+import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
 
 class RegisterPage extends GetView<AuthController> {
   RegisterPage({Key? key}) : super(key: key);
@@ -278,20 +279,15 @@ class RegisterPage extends GetView<AuthController> {
                                                   initial: () {},
                                                   loading: () {},
                                                   success: (data) {
-                                                    Get.snackbar(
-                                                      AppLocalizations
-                                                          .success(),
-                                                      'Register success!',
-                                                    );
+                                                    AlertDialogHelper
+                                                        .showRegisterSuccess();
                                                     Get.offNamed(
                                                         AppRoutes.login);
                                                   },
                                                   failed: (message) {
-                                                    Get.snackbar(
-                                                      AppLocalizations.error(),
-                                                      message ??
-                                                          'Register failed!',
-                                                    );
+                                                    AlertDialogHelper
+                                                        .showRegisterFailed(
+                                                            message: message);
                                                   },
                                                 );
                                               }

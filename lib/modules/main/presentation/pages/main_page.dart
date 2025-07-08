@@ -5,6 +5,7 @@ import 'package:flutter_boilerplate/modules/main/widgets/custom_navbar.dart';
 import 'package:flutter_boilerplate/modules/menu/presentation/pages/view_menu_page.dart';
 import 'package:flutter_boilerplate/core/routes/app_pages.dart';
 import 'package:flutter_boilerplate/modules/menu/presentation/controllers/view_menu_controller.dart';
+import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({super.key});
@@ -12,7 +13,8 @@ class MainPage extends GetView<MainController> {
   @override
   Widget build(BuildContext context) {
     // Inject ViewMenuController manually since ViewMenuPage is used directly
-    Get.lazyPut<ViewMenuController>(() => ViewMenuController());
+    Get.lazyPut<ViewMenuController>(
+        () => ViewMenuController(Get.find<MenuRepository>()));
     return Scaffold(
       bottomNavigationBar: CustomNavbar(
         selectedIndex: 0,

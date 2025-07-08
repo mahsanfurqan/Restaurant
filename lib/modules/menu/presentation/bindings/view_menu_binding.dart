@@ -4,6 +4,6 @@ import '../controllers/view_menu_controller.dart';
 class ViewMenuBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ViewMenuController>(() => ViewMenuController());
+    Get.lazyPut(() => ViewMenuController(Get.find()));
   }
 }

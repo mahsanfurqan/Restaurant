@@ -164,4 +164,7 @@ abstract class AppLocalizations {
       'registerUsernamePlaceholder'.tr;
   static String registerUsernameRequiredMessage() =>
       'registerUsernameRequiredMessage'.tr;
+  static String createMenuSuccessMessage() => 'createMenuSuccessMessage'.tr;
+  static String logoutSuccess() => 'logoutSuccess'.tr;
+  static String logoutFailed() => 'logoutFailed'.tr;
 }

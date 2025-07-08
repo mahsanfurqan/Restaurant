@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
+import 'package:flutter_boilerplate/shared/helpers/bottom_sheet_helper.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_input.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_button.dart';
@@ -10,6 +12,7 @@ import '../controllers/add_menu_controller.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_dropdown.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/category_model.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class AddMenuPage extends GetView<AddMenuController> {
   const AddMenuPage({Key? key}) : super(key: key);
@@ -49,35 +52,55 @@ class AddMenuPage extends GetView<AddMenuController> {
                     )),
               const SizedBox(height: 16),
               AppInput(
-                controller: controller.namaController,
+                controller: controller.nameController,
                 hintText: AppLocalizations.menuName(),
-                validator: controller.validateNama,
+                validator: FormBuilderValidators.required(
+                  errorText: AppLocalizations.menuNameRequired(),
+                ),
               ),
               const SizedBox(height: 16),
               Obx(() => AppDropdown<CategoryModel>(
-                    value: controller.selectedKategori.value,
-                    items: controller.kategoriList
-                        .map((kategori) => DropdownMenuItem<CategoryModel>(
-                              value: kategori,
-                              child: Text(kategori.name ?? 'Tanpa Nama'),
+                    value: controller.selectedCategory.value,
+                    items: controller.categoryList
+                        .map((category) => DropdownMenuItem<CategoryModel>(
+                              value: category,
+                              child: Text(category.name ?? 'No Name'),
                             ))
                         .toList(),
-                    onChanged: (value) => controller.selectedKategori.value =
+                    onChanged: (value) => controller.selectedCategory.value =
                         value as CategoryModel?,
                     label: AppLocalizations.category(),
-                    validator: controller.validateKategori,
+                    validator: (value) {
+                      if (value == null)
+                        return AppLocalizations.categoryRequired();
+                      return null;
+                    },
                   )),
               const SizedBox(height: 16),
               AppInput.textarea(
-                controller: controller.deskripsiController,
+                controller: controller.descriptionController,
                 hintText: AppLocalizations.descriptionOptional(),
               ),
               const SizedBox(height: 16),
               AppInput(
-                controller: controller.hargaController,
+                controller: controller.priceController,
                 hintText: AppLocalizations.price(),
                 keyboardType: TextInputType.number,
-                validator: controller.validateHarga,
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(
+                    errorText: AppLocalizations.priceRequired(),
+                  ),
+                  (value) {
+                    final numeric = value?.replaceAll(RegExp(r'[^0-9]'), '');
+                    if (numeric == null || numeric.isEmpty) {
+                      return AppLocalizations.priceRequired();
+                    }
+                    if (double.tryParse(numeric) == null) {
+                      return AppLocalizations.priceMustBeNumber();
+                    }
+                    return null;
+                  },
+                ]),
               ),
               const SizedBox(height: 24),
               Obx(() {
@@ -102,10 +125,10 @@ class AddMenuPage extends GetView<AddMenuController> {
                   textColor: Colors.white,
                   onPressed: () => controller.submit(
                     onFailed: (message) {
-                      Get.snackbar('Error', message);
+                      BottomSheetHelper.showError(message);
                     },
-                    onSuccess: (success) {
-                      Get.snackbar('Success', 'Menu saved successfully');
+                    onSuccess: (data) {
+                      AlertDialogHelper.showSuccessDialog();
                     },
                   ),
                 );

@@ -99,6 +99,17 @@ abstract class AlertDialogHelper {
     );
   }
 
+  static Future<dynamic> showSuccessDialog({
+    String? title,
+    String? message,
+  }) {
+    return _showDialog(
+      type: AppAlertType.success,
+      title: title ?? AppLocalizations.successTitle(),
+      message: message ?? AppLocalizations.createMenuSuccessMessage(),
+    );
+  }
+
   static Future<dynamic> showLogout({required VoidCallback onConfirm}) {
     return _showConfirmDialog(
       confirmBtnText: AppLocalizations.yes(),
@@ -126,6 +137,52 @@ abstract class AlertDialogHelper {
       type: AppAlertType.success,
       title: AppLocalizations.successTitle(),
       message: AppLocalizations.deleteNoteSuccessMessage(),
+    );
+  }
+
+  static Future<dynamic> showEditMenuSuccess() {
+    return showSuccessDialog(
+      title: AppLocalizations.successTitle(),
+      message: AppLocalizations.editMenuSuccess(),
+    );
+  }
+
+  static Future<dynamic> showDeleteMenuSuccess() {
+    return showSuccessDialog(
+      title: AppLocalizations.successTitle(),
+      message: AppLocalizations.deleteMenuSuccess(),
+    );
+  }
+
+  static Future<dynamic> showEditMenuFailed() {
+    return _showDialog(
+      type: AppAlertType.error,
+      title: AppLocalizations.error(),
+      message: AppLocalizations.editMenuFailed(),
+    );
+  }
+
+  static Future<dynamic> showDeleteMenuFailed() {
+    return _showDialog(
+      type: AppAlertType.error,
+      title: AppLocalizations.error(),
+      message: AppLocalizations.deleteMenuFailed(),
+    );
+  }
+
+  static Future<dynamic> showRegisterSuccess() {
+    return _showDialog(
+      type: AppAlertType.success,
+      title: AppLocalizations.successTitle(),
+      message: AppLocalizations.createMenuSuccessMessage(),
+    );
+  }
+
+  static Future<dynamic> showRegisterFailed({String? message}) {
+    return _showDialog(
+      type: AppAlertType.error,
+      title: AppLocalizations.error(),
+      message: message ?? 'Register failed!',
     );
   }
 }

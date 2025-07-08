@@ -8,6 +8,7 @@ import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import '../controllers/settings_controller.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/controllers/theme_controller.dart';
+import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({Key? key}) : super(key: key);
@@ -204,8 +205,10 @@ class SettingsPage extends GetView<SettingsController> {
                         onSuccess: () {
                           Get.back(); // close loading
                           Get.offAllNamed(AppRoutes.login);
-                          Get.snackbar('Sukses', 'Berhasil logout',
-                              backgroundColor: Colors.green[100]);
+                          AlertDialogHelper.showSuccessDialog(
+                            title: AppLocalizations.successTitle(),
+                            message: AppLocalizations.logoutSuccess(),
+                          );
                         },
                       );
                     }
