@@ -67,12 +67,13 @@ class AddMenuPage extends GetView<AddMenuController> {
                               child: Text(category.name ?? 'No Name'),
                             ))
                         .toList(),
-                    onChanged: (value) => controller.selectedCategory.value =
-                        value as CategoryModel?,
+                    onChanged: (value) =>
+                        controller.selectedCategory.value = value,
                     label: AppLocalizations.category(),
                     validator: (value) {
-                      if (value == null)
+                      if (value == null) {
                         return AppLocalizations.categoryRequired();
+                      }
                       return null;
                     },
                   )),
@@ -103,19 +104,6 @@ class AddMenuPage extends GetView<AddMenuController> {
                 ]),
               ),
               const SizedBox(height: 24),
-              Obx(() {
-                final state = controller.submitState.value;
-                if (state is ResultFailed<bool>) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      state.message ?? 'Failed to save menu',
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              }),
               Obx(() {
                 final state = controller.submitState.value;
                 return AppButton(
