@@ -279,15 +279,17 @@ class RegisterPage extends GetView<AuthController> {
                                                   initial: () {},
                                                   loading: () {},
                                                   success: (data) {
-                                                    AlertDialogHelper
-                                                        .showRegisterSuccess();
+                                                    AlertDialogHelper.showSuccess(
+                                                        AppLocalizations
+                                                            .createMenuSuccessMessage());
                                                     Get.offNamed(
                                                         AppRoutes.login);
                                                   },
                                                   failed: (message) {
-                                                    AlertDialogHelper
-                                                        .showRegisterFailed(
-                                                            message: message);
+                                                    AlertDialogHelper.showError(
+                                                        message ??
+                                                            AppLocalizations
+                                                                .unexpectedErrorMessage());
                                                   },
                                                 );
                                               }

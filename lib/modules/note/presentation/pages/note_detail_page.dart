@@ -58,7 +58,8 @@ class NoteDetailPage extends GetView<NoteDetailController> {
                     Get.back();
 
                     Get.offAndToNamed(AppRoutes.main, result: true);
-                    AlertDialogHelper.showDeleteNoteSuccess();
+                    AlertDialogHelper.showSuccess(
+                        AppLocalizations.deleteNoteSuccessMessage());
                   },
                 );
               },

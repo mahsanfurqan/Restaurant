@@ -91,22 +91,39 @@ abstract class AlertDialogHelper {
     );
   }
 
-  static Future<dynamic> showCreateNoteSuccess() {
-    return _showDialog(
-      type: AppAlertType.success,
-      title: AppLocalizations.successTitle(),
-      message: AppLocalizations.createNoteSuccessMessage(),
-    );
-  }
-
-  static Future<dynamic> showSuccessDialog({
-    String? title,
-    String? message,
-  }) {
+  static Future<dynamic> showSuccess(String message, {String? title}) {
     return _showDialog(
       type: AppAlertType.success,
       title: title ?? AppLocalizations.successTitle(),
-      message: message ?? AppLocalizations.createMenuSuccessMessage(),
+      message: message,
+    );
+  }
+
+  static Future<dynamic> showError(String message, {String? title}) {
+    return _showDialog(
+      type: AppAlertType.error,
+      title: title ?? AppLocalizations.error(),
+      message: message,
+    );
+  }
+
+  static Future<dynamic> showConfirm({
+    required String title,
+    required String message,
+    String? confirmBtnText,
+    String? cancelBtnText,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) {
+    return _showDialog(
+      type: AppAlertType.confirm,
+      title: title,
+      message: message,
+      confirmBtnText: confirmBtnText,
+      cancelBtnText: cancelBtnText,
+      onConfirm: onConfirm,
+      onCancel: onCancel,
+      showCancelBtn: true,
     );
   }
 
@@ -129,60 +146,6 @@ abstract class AlertDialogHelper {
       title: AppLocalizations.deleteNote(),
       message: AppLocalizations.deleteNoteConfirmationMessage(),
       onConfirm: onConfirm,
-    );
-  }
-
-  static Future<dynamic> showDeleteNoteSuccess() {
-    return _showDialog(
-      type: AppAlertType.success,
-      title: AppLocalizations.successTitle(),
-      message: AppLocalizations.deleteNoteSuccessMessage(),
-    );
-  }
-
-  static Future<dynamic> showEditMenuSuccess() {
-    return showSuccessDialog(
-      title: AppLocalizations.successTitle(),
-      message: AppLocalizations.editMenuSuccess(),
-    );
-  }
-
-  static Future<dynamic> showDeleteMenuSuccess() {
-    return showSuccessDialog(
-      title: AppLocalizations.successTitle(),
-      message: AppLocalizations.deleteMenuSuccess(),
-    );
-  }
-
-  static Future<dynamic> showEditMenuFailed() {
-    return _showDialog(
-      type: AppAlertType.error,
-      title: AppLocalizations.error(),
-      message: AppLocalizations.editMenuFailed(),
-    );
-  }
-
-  static Future<dynamic> showDeleteMenuFailed() {
-    return _showDialog(
-      type: AppAlertType.error,
-      title: AppLocalizations.error(),
-      message: AppLocalizations.deleteMenuFailed(),
-    );
-  }
-
-  static Future<dynamic> showRegisterSuccess() {
-    return _showDialog(
-      type: AppAlertType.success,
-      title: AppLocalizations.successTitle(),
-      message: AppLocalizations.createMenuSuccessMessage(),
-    );
-  }
-
-  static Future<dynamic> showRegisterFailed({String? message}) {
-    return _showDialog(
-      type: AppAlertType.error,
-      title: AppLocalizations.error(),
-      message: message ?? 'Register failed!',
     );
   }
 }

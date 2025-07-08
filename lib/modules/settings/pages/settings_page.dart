@@ -205,9 +205,9 @@ class SettingsPage extends GetView<SettingsController> {
                         onSuccess: () {
                           Get.back(); // close loading
                           Get.offAllNamed(AppRoutes.login);
-                          AlertDialogHelper.showSuccessDialog(
+                          AlertDialogHelper.showSuccess(
+                            AppLocalizations.logoutSuccess(),
                             title: AppLocalizations.successTitle(),
-                            message: AppLocalizations.logoutSuccess(),
                           );
                         },
                       );

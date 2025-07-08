@@ -132,7 +132,8 @@ class DetailMenu extends StatelessWidget {
                   await Future.delayed(const Duration(seconds: 1));
                   Get.back(); // tutup loading
                   Get.back(); // tutup bottomsheet
-                  await AlertDialogHelper.showDeleteMenuSuccess();
+                  await AlertDialogHelper.showSuccess(
+                      AppLocalizations.deleteMenuSuccess());
                   if (onEditSuccess != null) onEditSuccess!();
                 }
               },
@@ -218,14 +219,14 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
     await Future.delayed(const Duration(seconds: 1));
     try {
       if (mounted) {
-        await AlertDialogHelper.showEditMenuSuccess();
+        await AlertDialogHelper.showSuccess(AppLocalizations.editMenuSuccess());
         Get.back(result: true);
       }
     } catch (e) {
       setState(() {
         errorMsg = AppLocalizations.errorOccurred();
       });
-      await AlertDialogHelper.showEditMenuFailed();
+      await AlertDialogHelper.showError(AppLocalizations.editMenuFailed());
     } finally {
       if (mounted) setState(() => isLoading = false);
     }

@@ -49,7 +49,8 @@ class NoteFormPage extends GetView<NoteFormController> {
                     onFailed: BottomSheetHelper.showError,
                     onSuccess: (_) {
                       Get.back(result: true);
-                      AlertDialogHelper.showCreateNoteSuccess();
+                      AlertDialogHelper.showSuccess(
+                          AppLocalizations.createNoteSuccessMessage());
                     },
                   ),
                   text: AppLocalizations.save(),
