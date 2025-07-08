@@ -5,6 +5,8 @@ import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
 import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_input.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class DetailMenu extends StatelessWidget {
   final MenuModel menu;
@@ -176,18 +178,10 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
   late TextEditingController nameCtrl;
   late TextEditingController priceCtrl;
   late TextEditingController descCtrl;
-  String kategori = '';
+  String? kategori;
   bool isLoading = false;
   String? errorMsg;
-
-  bool get isValid {
-    return nameCtrl.text.trim().isNotEmpty &&
-        kategori.isNotEmpty &&
-        priceCtrl.text.trim().isNotEmpty &&
-        int.tryParse(priceCtrl.text.trim()) != null &&
-        int.parse(priceCtrl.text.trim()) > 0 &&
-        descCtrl.text.trim().isNotEmpty;
-  }
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -200,7 +194,7 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
                 widget.menu.description == 'descMatcha'
             ? ''
             : widget.menu.description);
-    kategori = widget.menu.categories.name ?? '';
+    kategori = widget.menu.categories.name;
   }
 
   @override
@@ -212,6 +206,7 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
   }
 
   Future<void> _submit() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() {
       isLoading = true;
       errorMsg = null;
@@ -237,57 +232,70 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
     return AlertDialog(
       title: Text(AppLocalizations.editMenu()),
       content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameCtrl,
-              decoration:
-                  InputDecoration(labelText: AppLocalizations.menuNameLabel()),
-              onChanged: (_) => setState(() {}),
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              value: kategori,
-              items: [
-                DropdownMenuItem(
-                    value: 'categoryFood',
-                    child: Text(AppLocalizations.categoryFood())),
-                DropdownMenuItem(
-                    value: 'categoryDrink',
-                    child: Text(AppLocalizations.categoryDrink())),
-              ],
-              onChanged: (val) {
-                if (val != null) setState(() => kategori = val);
-              },
-              decoration:
-                  InputDecoration(labelText: AppLocalizations.categoryLabel()),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: priceCtrl,
-              keyboardType: TextInputType.number,
-              decoration:
-                  InputDecoration(labelText: AppLocalizations.priceLabel()),
-              onChanged: (_) => setState(() {}),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: descCtrl,
-              decoration: InputDecoration(
-                  labelText: AppLocalizations.descriptionLabel()),
-              maxLines: 2,
-              onChanged: (_) => setState(() {}),
-            ),
-            if (errorMsg != null) ...[
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppInput(
+                controller: nameCtrl,
+                hintText: AppLocalizations.menuNameLabel(),
+                validator: FormBuilderValidators.required(
+                  errorText: AppLocalizations.menuNameRequired(),
+                ),
+              ),
               const SizedBox(height: 8),
-              Text(errorMsg!, style: const TextStyle(color: Colors.red)),
+              DropdownButtonFormField<String>(
+                value: kategori,
+                items: [
+                  DropdownMenuItem(
+                      value: 'categoryFood',
+                      child: Text(AppLocalizations.categoryFood())),
+                  DropdownMenuItem(
+                      value: 'categoryDrink',
+                      child: Text(AppLocalizations.categoryDrink())),
+                ],
+                onChanged: (val) {
+                  if (val != null) setState(() => kategori = val);
+                },
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.categoryLabel()),
+                validator: FormBuilderValidators.required(
+                  errorText: AppLocalizations.categoryRequired(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              AppInput(
+                controller: priceCtrl,
+                hintText: AppLocalizations.priceLabel(),
+                keyboardType: TextInputType.number,
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(
+                    errorText: AppLocalizations.priceRequired(),
+                  ),
+                  FormBuilderValidators.numeric(
+                    errorText: AppLocalizations.priceMustBeNumber(),
+                  ),
+                ]),
+              ),
+              const SizedBox(height: 8),
+              AppInput.textarea(
+                controller: descCtrl,
+                hintText: AppLocalizations.descriptionLabel(),
+                validator: FormBuilderValidators.required(
+                  errorText: AppLocalizations.description(),
+                ),
+              ),
+              if (errorMsg != null) ...[
+                const SizedBox(height: 8),
+                Text(errorMsg!, style: const TextStyle(color: Colors.red)),
+              ],
+              if (isLoading) ...[
+                const SizedBox(height: 16),
+                const CircularProgressIndicator(),
+              ],
             ],
-            if (isLoading) ...[
-              const SizedBox(height: 16),
-              const CircularProgressIndicator(),
-            ],
-          ],
+          ),
         ),
       ),
       actions: [
@@ -296,9 +304,9 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
           child: Text(AppLocalizations.cancel()),
         ),
         ElevatedButton(
-          onPressed: isValid && !isLoading ? _submit : null,
+          onPressed: !isLoading ? _submit : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: isValid ? AppColors.green : Colors.grey,
+            backgroundColor: !isLoading ? AppColors.green : Colors.grey,
           ),
           child: Text(AppLocalizations.save()),
         ),

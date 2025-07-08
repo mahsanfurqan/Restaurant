@@ -149,7 +149,10 @@ class LoginPage extends GetView<LoginController> {
                                       controller: controller.passCtrl,
                                       hintText: AppLocalizations
                                           .passwordPlaceholder(),
-                                      validator: AppUtils.passwordValidator(),
+                                      validator: FormBuilderValidators.required(
+                                        errorText: AppLocalizations
+                                            .passwordRequiredMessage(),
+                                      ),
                                     ),
                                   ],
                                 ),
