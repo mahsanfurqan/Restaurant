@@ -180,7 +180,6 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
   late TextEditingController descCtrl;
   String? kategori;
   bool isLoading = false;
-  String? errorMsg;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -209,7 +208,6 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() {
       isLoading = true;
-      errorMsg = null;
     });
     await Future.delayed(const Duration(seconds: 1));
     try {
@@ -218,9 +216,6 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
         Get.back(result: true);
       }
     } catch (e) {
-      setState(() {
-        errorMsg = AppLocalizations.errorOccurred();
-      });
       await AlertDialogHelper.showError(AppLocalizations.editMenuFailed());
     } finally {
       if (mounted) setState(() => isLoading = false);
@@ -286,10 +281,6 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
                   errorText: AppLocalizations.description(),
                 ),
               ),
-              if (errorMsg != null) ...[
-                const SizedBox(height: 8),
-                Text(errorMsg!, style: const TextStyle(color: Colors.red)),
-              ],
               if (isLoading) ...[
                 const SizedBox(height: 16),
                 const CircularProgressIndicator(),
