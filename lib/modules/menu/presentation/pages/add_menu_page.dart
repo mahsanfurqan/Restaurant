@@ -70,12 +70,9 @@ class AddMenuPage extends GetView<AddMenuController> {
                     onChanged: (value) =>
                         controller.selectedCategory.value = value,
                     label: AppLocalizations.category(),
-                    validator: (value) {
-                      if (value == null) {
-                        return AppLocalizations.categoryRequired();
-                      }
-                      return null;
-                    },
+                    validator: FormBuilderValidators.required(
+                      errorText: AppLocalizations.categoryRequired(),
+                    ),
                   )),
               const SizedBox(height: 16),
               AppInput.textarea(
@@ -91,16 +88,9 @@ class AddMenuPage extends GetView<AddMenuController> {
                   FormBuilderValidators.required(
                     errorText: AppLocalizations.priceRequired(),
                   ),
-                  (value) {
-                    final numeric = value?.replaceAll(RegExp(r'[^0-9]'), '');
-                    if (numeric == null || numeric.isEmpty) {
-                      return AppLocalizations.priceRequired();
-                    }
-                    if (double.tryParse(numeric) == null) {
-                      return AppLocalizations.priceMustBeNumber();
-                    }
-                    return null;
-                  },
+                  FormBuilderValidators.numeric(
+                    errorText: AppLocalizations.priceMustBeNumber(),
+                  ),
                 ]),
               ),
               const SizedBox(height: 24),
