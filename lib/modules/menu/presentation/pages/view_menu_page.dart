@@ -10,6 +10,7 @@ import 'package:flutter_boilerplate/modules/localization/presentation/controller
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_refresher.dart';
 
 class ViewMenuPage extends GetView<ViewMenuController> {
   const ViewMenuPage({Key? key}) : super(key: key);
@@ -26,49 +27,46 @@ class ViewMenuPage extends GetView<ViewMenuController> {
           localizationCtrl.currentLocale.value;
           final state = controller.menuState.value;
 
-          if (state is ResultLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is ResultSuccess<List<MenuModel>>) {
-            final menus = state.data;
-            return MenuList(
-              menus: menus,
-              isLoading: false,
-              isError: false,
-              isEmpty: menus.isEmpty,
-              onRefresh: controller.refreshMenu,
-              onTap: (menu) {
-                Get.bottomSheet(
-                  DetailMenu(
-                    menu: menu,
-                    onEditSuccess: () {
-                      controller.fetchMenus();
-                    },
-                  ),
-                  isScrollControlled: true,
-                  backgroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24)),
-                  ),
-                );
-              },
-            );
-          } else if (state is ResultFailed<List<MenuModel>>) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.message ?? 'Failed to load menu data'),
-                  ElevatedButton(
-                    onPressed: controller.refreshMenu,
-                    child: const Text('Retry'),
-                  ),
-                ],
+          return AppRefresher(
+            onRefresh: controller.refreshMenu,
+            child: state.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              success: (menus) => menus.isEmpty
+                  ? Center(child: Text(AppLocalizations.menuNotFound()))
+                  : MenuList(
+                      menus: menus,
+                      onTap: (menu) {
+                        Get.bottomSheet(
+                          DetailMenu(
+                            menu: menu,
+                            onEditSuccess: () {
+                              controller.fetchMenus();
+                            },
+                          ),
+                          isScrollControlled: true,
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(24)),
+                          ),
+                        );
+                      },
+                    ),
+              failed: (message) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(message ?? 'Failed to load menu data'),
+                    ElevatedButton(
+                      onPressed: controller.refreshMenu,
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
               ),
-            );
-          }
-
-          return const SizedBox.shrink();
+              initial: () => const SizedBox.shrink(),
+            ),
+          );
         }),
       ),
       floatingActionButton: AppButton(
