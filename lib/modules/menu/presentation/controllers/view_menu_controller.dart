@@ -5,8 +5,8 @@ import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart'
 import 'package:flutter_boilerplate/core/common/failures.dart';
 
 class ViewMenuController extends GetxController {
-  final MenuRepository menuRepository;
-  ViewMenuController(this.menuRepository);
+  final MenuRepository _menuRepository;
+  ViewMenuController(this._menuRepository);
 
   final menuState =
       Rx<ResultState<List<MenuModel>>>(const ResultState.initial());
@@ -19,7 +19,7 @@ class ViewMenuController extends GetxController {
 
   Future<void> fetchMenus() async {
     menuState.value = const ResultState.loading();
-    final result = await menuRepository.fetchMenus();
+    final result = await _menuRepository.fetchMenus();
     result.fold(
       (failure) =>
           menuState.value = ResultState.failed(_getErrorMessage(failure)),

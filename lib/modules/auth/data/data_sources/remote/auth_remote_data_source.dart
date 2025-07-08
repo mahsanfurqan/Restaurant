@@ -11,7 +11,7 @@ import 'package:flutter_boilerplate/modules/auth/data/models/register_response_w
 class AuthRemoteDataSource {
   final AuthService _authService;
 
-  const AuthRemoteDataSource(this._authService);
+  AuthRemoteDataSource(this._authService);
 
   Future<TokenModel> login(LoginDto payload) async {
     print('DEBUG: LoginDto toJson: ${payload.toJson()}');

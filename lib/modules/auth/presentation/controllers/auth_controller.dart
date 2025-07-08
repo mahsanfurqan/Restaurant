@@ -41,7 +41,7 @@ class AuthController extends GetxController {
       }
       result.fold((failure) {
         print(
-            'DEBUG: AuthController authCheck - Auth failed: [31m${failure.message}[0m');
+            'DEBUG: AuthController authCheck - Auth failed:  [31m${failure.message} [0m');
         authState.value = const ResultState.failed();
       }, (data) {
         print('DEBUG: AuthController authCheck - Auth success: ${data.id}');

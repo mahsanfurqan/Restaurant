@@ -7,8 +7,8 @@ import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 
 class AddMenuController extends GetxController {
-  final MenuRepository menuRepository;
-  AddMenuController(this.menuRepository);
+  final MenuRepository _menuRepository;
+  AddMenuController(this._menuRepository);
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
@@ -29,7 +29,7 @@ class AddMenuController extends GetxController {
   }
 
   Future<void> fetchCategories() async {
-    final result = await menuRepository.fetchCategories();
+    final result = await _menuRepository.fetchCategories();
     result.fold(
       (failure) => categoryList.assignAll([]),
       (data) => categoryList.assignAll(data),
@@ -62,7 +62,7 @@ class AddMenuController extends GetxController {
       restaurantId: 1,
     );
 
-    final result = await menuRepository.createMenu(request);
+    final result = await _menuRepository.createMenu(request);
     result.fold((failure) {
       final message = AppUtils.getErrorMessage(failure.error?.errors);
       submitState.value = ResultState.failed();
