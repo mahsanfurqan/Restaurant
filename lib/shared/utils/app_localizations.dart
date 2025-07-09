@@ -167,4 +167,5 @@ abstract class AppLocalizations {
   static String createMenuSuccessMessage() => 'createMenuSuccessMessage'.tr;
   static String logoutSuccess() => 'logoutSuccess'.tr;
   static String logoutFailed() => 'logoutFailed'.tr;
+  static String retry() => 'retry'.tr;
 }

@@ -5,6 +5,7 @@ import 'package:flutter_boilerplate/modules/auth/data/repositories/auth_reposito
 import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_controller.dart';
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
+import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
@@ -24,7 +25,8 @@ class LoginController extends GetxController {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
-  final loginState = Rx<ResultState<TokenModel>>(const ResultState.initial());
+  final loginState =
+      Rx<ResultState<BaseResponse<TokenModel>>>(const ResultState.initial());
 
   Future<void> login({
     Function(String message)? onFailed,
@@ -43,9 +45,11 @@ class LoginController extends GetxController {
         loginState.value = ResultState.failed(failure.message);
         onFailed?.call(failure.message ?? 'Login gagal');
       },
-      (token) async {
-        loginState.value = ResultState.success(token);
-        onSuccess?.call(token);
+      (response) async {
+        loginState.value = ResultState.success(response);
+        if (response.data != null) {
+          onSuccess?.call(response.data!);
+        }
         final authCtrl = Get.find<AuthController>();
         authCtrl.setLoggedInUsername(email);
 

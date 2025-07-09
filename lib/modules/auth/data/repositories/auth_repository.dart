@@ -13,9 +13,9 @@ import 'package:flutter_boilerplate/modules/auth/data/models/token_model.dart';
 import 'package:flutter_boilerplate/modules/user/data/data_sources/remote/user_remote_data_source.dart';
 import 'package:flutter_boilerplate/modules/user/data/models/user_model.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
-import 'package:flutter_boilerplate/modules/auth/data/models/register_response_model.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/refresh_token_dto.dart';
 import 'package:flutter_boilerplate/shared/responses/base_error_response.dart';
+import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 
 class AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -47,10 +47,13 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure, TokenModel>> login(LoginDto payload) async {
+  Future<Either<Failure, BaseResponse<TokenModel>>> login(
+      LoginDto payload) async {
     try {
       final result = await _remoteDataSource.login(payload);
-      await _localDataSource.setToken(result);
+      if (result.data != null) {
+        await _localDataSource.setToken(result.data!);
+      }
       return Right(result);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
@@ -142,29 +145,23 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure, RegisterDataModel>> register(
+  Future<Either<Failure, BaseResponse<void>>> register(
       RegisterRequestModel payload) async {
     try {
       final response = await _remoteDataSource.register(payload);
-
-      if (response.data == null) {
-        return Left(CacheFailure('Register response data is null'));
-      }
-
-      return Right(response.data!);
+      return Right(response);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
-    } catch (e) {
-      // Tangkap error parsing
-      return Left(CacheFailure('Parsing error: ${e.toString()}'));
     }
   }
 
-  Future<Either<Failure, TokenModel>> refreshToken(
+  Future<Either<Failure, BaseResponse<TokenModel>>> refreshToken(
       RefreshTokenDto payload) async {
     try {
       final result = await _remoteDataSource.refreshToken(payload);
-      await _localDataSource.setToken(result);
+      if (result.data != null) {
+        await _localDataSource.setToken(result.data!);
+      }
       return Right(result);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));

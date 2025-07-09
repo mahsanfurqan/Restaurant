@@ -15,7 +15,7 @@ import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart'
 import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
 
 class RegisterPage extends GetView<AuthController> {
-  RegisterPage({Key? key}) : super(key: key);
+  RegisterPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameCtrl = TextEditingController();

@@ -6,33 +6,28 @@ import 'package:flutter_boilerplate/modules/auth/data/models/token_model.dart';
 import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/refresh_token_dto.dart';
-import 'package:flutter_boilerplate/modules/auth/data/models/register_response_wrapper_model.dart';
 
 class AuthRemoteDataSource {
   final AuthService _authService;
 
   AuthRemoteDataSource(this._authService);
 
-  Future<TokenModel> login(LoginDto payload) async {
+  Future<BaseResponse<TokenModel>> login(LoginDto payload) async {
     print('DEBUG: LoginDto toJson: ${payload.toJson()}');
-
-    final response = await _authService.login(payload);
-    return response.data;
+    return await _authService.login(payload);
   }
 
   Future<BaseResponse<AuthValidateModel>> validateAuth() =>
       _authService.validateAuth();
 
-  Future<void> logout(LogoutDto payload) => _authService.logout(payload);
+  Future<BaseResponse<void>> logout(LogoutDto payload) =>
+      _authService.logout(payload);
 
-  Future<RegisterResponseWrapperModel> register(
-      RegisterRequestModel payload) async {
+  Future<BaseResponse<void>> register(RegisterRequestModel payload) async {
     print('DEBUG: RegisterRequestModel toJson: ${payload.toJson()}');
-
-    final response = await _authService.register(payload);
-    return response;
+    return await _authService.register(payload);
   }
 
-  Future<TokenModel> refreshToken(RefreshTokenDto payload) =>
+  Future<BaseResponse<TokenModel>> refreshToken(RefreshTokenDto payload) =>
       _authService.refreshToken(payload);
 }

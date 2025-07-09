@@ -21,7 +21,7 @@ abstract class AuthService {
   }) = _AuthService;
 
   @POST('/auth/login')
-  Future<LoginResponseModel> login(@Body() LoginDto payload);
+  Future<BaseResponse<TokenModel>> login(@Body() LoginDto payload);
 
   @GET('/auth/validate')
   Future<BaseResponse<AuthValidateModel>> validateAuth();
@@ -30,9 +30,9 @@ abstract class AuthService {
   Future<BaseResponse<void>> logout(@Body() LogoutDto payload);
 
   @POST('/auth/register')
-  Future<RegisterResponseWrapperModel> register(
-      @Body() RegisterRequestModel payload);
+  Future<BaseResponse<void>> register(@Body() RegisterRequestModel payload);
 
   @POST('/auth/refresh-token')
-  Future<TokenModel> refreshToken(@Body() RefreshTokenDto payload);
+  Future<BaseResponse<TokenModel>> refreshToken(
+      @Body() RefreshTokenDto payload);
 }

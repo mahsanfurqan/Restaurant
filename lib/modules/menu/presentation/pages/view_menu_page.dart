@@ -8,12 +8,10 @@ import '../widgets/menu_list.dart';
 import '../widgets/detail_menu.dart';
 import 'package:flutter_boilerplate/modules/localization/presentation/controllers/localization_controller.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
-import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
-import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_refresher.dart';
 
 class ViewMenuPage extends GetView<ViewMenuController> {
-  const ViewMenuPage({Key? key}) : super(key: key);
+  const ViewMenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +54,12 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(message ?? 'Failed to load menu data'),
-                    ElevatedButton(
+                    Text(message ?? AppLocalizations.menuNotFound()),
+                    const SizedBox(height: 16),
+                    AppButton(
                       onPressed: controller.refreshMenu,
-                      child: const Text('Retry'),
+                      text: AppLocalizations.retry(),
+                      backgroundColor: AppColors.green,
                     ),
                   ],
                 ),

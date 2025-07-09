@@ -15,7 +15,7 @@ import 'package:flutter_boilerplate/modules/menu/data/models/category_model.dart
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class AddMenuPage extends GetView<AddMenuController> {
-  const AddMenuPage({Key? key}) : super(key: key);
+  const AddMenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {

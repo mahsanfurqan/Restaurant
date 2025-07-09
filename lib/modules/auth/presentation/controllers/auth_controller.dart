@@ -27,8 +27,7 @@ class AuthController extends GetxController {
   final authState =
       Rx<ResultState<AuthValidateModel>>(const ResultState.loading());
   final loggedInUsername = ''.obs;
-  final registerState =
-      Rx<ResultState<RegisterDataModel>>(const ResultState.initial());
+  final registerState = Rx<ResultState<bool>>(const ResultState.initial());
 
   Future<void> authCheck({bool forceValidate = false}) async {
     try {
@@ -62,7 +61,7 @@ class AuthController extends GetxController {
     final result = await _repository.register(payload);
     result.fold(
       (failure) => registerState.value = ResultState.failed(failure.message),
-      (data) => registerState.value = ResultState.success(data),
+      (data) => registerState.value = const ResultState.success(true),
     );
   }
 }

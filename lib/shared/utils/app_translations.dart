@@ -164,6 +164,7 @@ class AppTranslations extends Translations {
         'createMenuSuccessMessage': 'Menu created successfully',
         'logoutSuccess': 'Logout successful',
         'logoutFailed': 'Logout failed',
+        'retry': 'Retry',
       },
       'id': {
         'selectFromGallery': 'Pilih dari Galeri',
@@ -325,6 +326,7 @@ class AppTranslations extends Translations {
         'createMenuSuccessMessage': 'Menu berhasil dibuat',
         'logoutSuccess': 'Berhasil logout',
         'logoutFailed': 'Gagal logout',
+        'retry': 'Coba Lagi',
       },
     };
   }
