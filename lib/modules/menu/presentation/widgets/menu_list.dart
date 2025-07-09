@@ -4,55 +4,12 @@ import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
-
-class MenuList extends StatelessWidget {
-  final List<MenuModel> menus;
-  final Function(MenuModel) onTap;
-
-  const MenuList({
-    super.key,
-    required this.menus,
-    required this.onTap,
-  });
-
-  String toCurrency(String value) {
-    if (value.isEmpty) return '-';
-    try {
-      final number = int.tryParse(value) ?? 0;
-      return 'Rp${number.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.')},-';
-    } catch (_) {
-      return value;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: menus.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        final menu = menus[index];
-        return MenuListItem(menu: menu, onTap: () => onTap(menu));
-      },
-    );
-  }
-}
+import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 
 class MenuListItem extends StatelessWidget {
   final MenuModel menu;
-  final VoidCallback onTap;
-  const MenuListItem({super.key, required this.menu, required this.onTap});
-
-  String toCurrency(String value) {
-    if (value.isEmpty) return '-';
-    try {
-      final number = int.tryParse(value) ?? 0;
-      return 'Rp${number.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.')},-';
-    } catch (_) {
-      return value;
-    }
-  }
+  final VoidCallback? onTap;
+  const MenuListItem({super.key, required this.menu, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +82,7 @@ class MenuListItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      toCurrency(menu.price ?? ''),
+                      int.tryParse(menu.price ?? '')?.toCurrencyFormat ?? '-',
                       style: AppFonts.smMedium.copyWith(color: Colors.black87),
                     ),
                   ],

@@ -25,47 +25,54 @@ class ViewMenuPage extends GetView<ViewMenuController> {
           localizationCtrl.currentLocale.value;
           final state = controller.menuState.value;
 
-          return AppRefresher(
-            onRefresh: controller.refreshMenu,
-            child: state.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              success: (menus) => menus.isEmpty
-                  ? Center(child: Text(AppLocalizations.menuNotFound()))
-                  : MenuList(
-                      menus: menus,
-                      onTap: (menu) {
-                        Get.bottomSheet(
-                          DetailMenu(
-                            menu: menu,
-                            onEditSuccess: () {
-                              controller.fetchMenus();
-                            },
-                          ),
-                          isScrollControlled: true,
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(24)),
-                          ),
-                        );
-                      },
-                    ),
-              failed: (message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(message ?? AppLocalizations.menuNotFound()),
-                    const SizedBox(height: 16),
-                    AppButton(
-                      onPressed: controller.refreshMenu,
-                      text: AppLocalizations.retry(),
-                      backgroundColor: AppColors.green,
-                    ),
-                  ],
-                ),
+          return state.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            success: (menus) => menus.isEmpty
+                ? Center(child: Text(AppLocalizations.menuNotFound()))
+                : ListView.separated(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(16),
+                    itemCount: menus.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final menu = menus[index];
+                      return MenuListItem(
+                        menu: menu,
+                        onTap: () {
+                          Get.bottomSheet(
+                            DetailMenu(
+                              menu: menu,
+                              onEditSuccess: () {
+                                controller.fetchMenus();
+                              },
+                            ),
+                            isScrollControlled: true,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(24)),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+            failed: (message) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(message ?? AppLocalizations.menuNotFound()),
+                  const SizedBox(height: 16),
+                  AppButton(
+                    onPressed: controller.refreshMenu,
+                    text: AppLocalizations.retry(),
+                    backgroundColor: AppColors.green,
+                  ),
+                ],
               ),
-              initial: () => const SizedBox.shrink(),
             ),
+            initial: () => const SizedBox.shrink(),
           );
         }),
       ),
