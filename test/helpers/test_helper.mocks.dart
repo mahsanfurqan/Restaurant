@@ -7,28 +7,26 @@ import 'dart:async' as _i13;
 import 'dart:ui' as _i15;
 
 import 'package:dartz/dartz.dart' as _i4;
-import 'package:flutter/material.dart' as _i33;
+import 'package:flutter/material.dart' as _i32;
 import 'package:flutter/widgets.dart' as _i3;
 import 'package:flutter_boilerplate/core/common/failures.dart' as _i20;
-import 'package:flutter_boilerplate/core/common/network_info.dart' as _i51;
-import 'package:flutter_boilerplate/core/common/token_manager.dart' as _i50;
+import 'package:flutter_boilerplate/core/common/network_info.dart' as _i50;
+import 'package:flutter_boilerplate/core/common/token_manager.dart' as _i49;
 import 'package:flutter_boilerplate/modules/auth/data/data_sources/local/auth_local_data_source.dart'
-    as _i36;
+    as _i35;
 import 'package:flutter_boilerplate/modules/auth/data/data_sources/remote/auth_remote_data_source.dart'
-    as _i34;
+    as _i33;
 import 'package:flutter_boilerplate/modules/auth/data/data_sources/remote/services/auth_service.dart'
-    as _i47;
+    as _i46;
 import 'package:flutter_boilerplate/modules/auth/data/models/auth_validate_model.dart'
     as _i24;
 import 'package:flutter_boilerplate/modules/auth/data/models/login_dto.dart'
     as _i23;
 import 'package:flutter_boilerplate/modules/auth/data/models/logout_dto.dart'
-    as _i35;
+    as _i34;
 import 'package:flutter_boilerplate/modules/auth/data/models/refresh_token_dto.dart'
-    as _i27;
-import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart'
     as _i26;
-import 'package:flutter_boilerplate/modules/auth/data/models/register_response_model.dart'
+import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart'
     as _i25;
 import 'package:flutter_boilerplate/modules/auth/data/models/token_model.dart'
     as _i22;
@@ -39,45 +37,45 @@ import 'package:flutter_boilerplate/modules/chat/presentation/controllers/chat_c
 import 'package:flutter_boilerplate/modules/home/presentation/controllers/home_controller.dart'
     as _i10;
 import 'package:flutter_boilerplate/modules/localization/data/data_sources/local/localization_local_data_source.dart'
-    as _i42;
+    as _i41;
 import 'package:flutter_boilerplate/modules/localization/data/repositories/localization_repository.dart'
-    as _i31;
+    as _i30;
 import 'package:flutter_boilerplate/modules/note/data/data_sources/local/db/note_dao.dart'
-    as _i45;
+    as _i44;
 import 'package:flutter_boilerplate/modules/note/data/data_sources/local/entities/note_entity.dart'
-    as _i46;
+    as _i45;
 import 'package:flutter_boilerplate/modules/note/data/data_sources/local/note_local_data_source.dart'
-    as _i40;
+    as _i39;
 import 'package:flutter_boilerplate/modules/note/data/data_sources/remote/note_remote_data_source.dart'
-    as _i38;
+    as _i37;
 import 'package:flutter_boilerplate/modules/note/data/data_sources/remote/services/note_service.dart'
-    as _i49;
+    as _i48;
 import 'package:flutter_boilerplate/modules/note/data/models/note_dto.dart'
-    as _i29;
+    as _i28;
 import 'package:flutter_boilerplate/modules/note/data/models/note_model.dart'
     as _i12;
 import 'package:flutter_boilerplate/modules/note/data/repositories/note_repository.dart'
-    as _i28;
+    as _i27;
 import 'package:flutter_boilerplate/modules/note/presentation/controllers/note_detail_controller.dart'
     as _i16;
 import 'package:flutter_boilerplate/modules/note/presentation/controllers/note_form_controller.dart'
     as _i17;
 import 'package:flutter_boilerplate/modules/socket/data/data_sources/remote/socket_remote_data_source.dart'
-    as _i41;
+    as _i40;
 import 'package:flutter_boilerplate/modules/socket/data/repository/socket_repository.dart'
-    as _i30;
+    as _i29;
 import 'package:flutter_boilerplate/modules/theme/data/data_source/local/theme_local_data_source.dart'
     as _i5;
 import 'package:flutter_boilerplate/modules/theme/data/repositories/theme_repository.dart'
-    as _i32;
+    as _i31;
 import 'package:flutter_boilerplate/modules/user/data/data_sources/local/db/user_dao.dart'
-    as _i43;
+    as _i42;
 import 'package:flutter_boilerplate/modules/user/data/data_sources/local/entities/user_entity.dart'
-    as _i44;
+    as _i43;
 import 'package:flutter_boilerplate/modules/user/data/data_sources/remote/services/user_service.dart'
-    as _i48;
+    as _i47;
 import 'package:flutter_boilerplate/modules/user/data/data_sources/remote/user_remote_data_source.dart'
-    as _i37;
+    as _i36;
 import 'package:flutter_boilerplate/modules/user/data/models/user_me_model.dart'
     as _i7;
 import 'package:flutter_boilerplate/modules/user/data/models/user_model.dart'
@@ -89,7 +87,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i8;
 import 'package:get/get.dart' as _i2;
 import 'package:get/get_state_manager/src/simple/list_notifier.dart' as _i14;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i39;
+import 'package:mockito/src/dummies.dart' as _i38;
 import 'package:web_socket_channel/web_socket_channel.dart' as _i9;
 
 // ignore_for_file: type=lint
@@ -1431,7 +1429,7 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
 
   @override
   _i13.Future<_i4.Either<_i20.Failure, _i6.BaseResponse<void>>> register(
-          _i26.RegisterRequestModel? payload) =>
+          _i25.RegisterRequestModel? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #register,
@@ -1451,7 +1449,7 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
   @override
   _i13.Future<
       _i4.Either<_i20.Failure, _i6.BaseResponse<_i22.TokenModel>>> refreshToken(
-          _i27.RefreshTokenDto? payload) =>
+          _i26.RefreshTokenDto? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #refreshToken,
@@ -1474,7 +1472,7 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
 /// A class which mocks [NoteRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNoteRepository extends _i1.Mock implements _i28.NoteRepository {
+class MockNoteRepository extends _i1.Mock implements _i27.NoteRepository {
   MockNoteRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -1482,7 +1480,7 @@ class MockNoteRepository extends _i1.Mock implements _i28.NoteRepository {
   @override
   _i13.Future<
       _i4.Either<_i20.Failure, _i6.BaseResponse<_i12.NoteModel>>> createNote(
-          _i29.NoteDto? note) =>
+          _i28.NoteDto? note) =>
       (super.noSuchMethod(
         Invocation.method(
           #createNote,
@@ -1579,7 +1577,7 @@ class MockNoteRepository extends _i1.Mock implements _i28.NoteRepository {
   _i13.Future<
       _i4.Either<_i20.Failure, _i6.BaseResponse<_i12.NoteModel>>> updateNote(
     int? id,
-    _i29.NoteDto? note,
+    _i28.NoteDto? note,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1609,7 +1607,7 @@ class MockNoteRepository extends _i1.Mock implements _i28.NoteRepository {
 /// A class which mocks [SocketRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSocketRepository extends _i1.Mock implements _i30.SocketRepository {
+class MockSocketRepository extends _i1.Mock implements _i29.SocketRepository {
   MockSocketRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -1688,7 +1686,7 @@ class MockSocketRepository extends _i1.Mock implements _i30.SocketRepository {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalizationRepository extends _i1.Mock
-    implements _i31.LocalizationRepository {
+    implements _i30.LocalizationRepository {
   MockLocalizationRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -1715,7 +1713,7 @@ class MockLocalizationRepository extends _i1.Mock
 /// A class which mocks [ThemeRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockThemeRepository extends _i1.Mock implements _i32.ThemeRepository {
+class MockThemeRepository extends _i1.Mock implements _i31.ThemeRepository {
   MockThemeRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -1739,20 +1737,20 @@ class MockThemeRepository extends _i1.Mock implements _i32.ThemeRepository {
       ) as _i13.Future<bool>);
 
   @override
-  _i13.Future<_i33.ThemeMode?> getSavedThemeMode() => (super.noSuchMethod(
+  _i13.Future<_i32.ThemeMode?> getSavedThemeMode() => (super.noSuchMethod(
         Invocation.method(
           #getSavedThemeMode,
           [],
         ),
-        returnValue: _i13.Future<_i33.ThemeMode?>.value(),
-      ) as _i13.Future<_i33.ThemeMode?>);
+        returnValue: _i13.Future<_i32.ThemeMode?>.value(),
+      ) as _i13.Future<_i32.ThemeMode?>);
 }
 
 /// A class which mocks [AuthRemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthRemoteDataSource extends _i1.Mock
-    implements _i34.AuthRemoteDataSource {
+    implements _i33.AuthRemoteDataSource {
   MockAuthRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -1794,7 +1792,7 @@ class MockAuthRemoteDataSource extends _i1.Mock
       ) as _i13.Future<_i6.BaseResponse<_i24.AuthValidateModel>>);
 
   @override
-  _i13.Future<_i6.BaseResponse<void>> logout(_i35.LogoutDto? payload) =>
+  _i13.Future<_i6.BaseResponse<void>> logout(_i34.LogoutDto? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #logout,
@@ -1812,7 +1810,7 @@ class MockAuthRemoteDataSource extends _i1.Mock
 
   @override
   _i13.Future<_i6.BaseResponse<void>> register(
-          _i26.RegisterRequestModel? payload) =>
+          _i25.RegisterRequestModel? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #register,
@@ -1830,7 +1828,7 @@ class MockAuthRemoteDataSource extends _i1.Mock
 
   @override
   _i13.Future<_i6.BaseResponse<_i22.TokenModel>> refreshToken(
-          _i27.RefreshTokenDto? payload) =>
+          _i26.RefreshTokenDto? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #refreshToken,
@@ -1851,7 +1849,7 @@ class MockAuthRemoteDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthLocalDataSource extends _i1.Mock
-    implements _i36.AuthLocalDataSource {
+    implements _i35.AuthLocalDataSource {
   MockAuthLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -1926,7 +1924,7 @@ class MockAuthLocalDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUserRemoteDataSource extends _i1.Mock
-    implements _i37.UserRemoteDataSource {
+    implements _i36.UserRemoteDataSource {
   MockUserRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -1968,13 +1966,13 @@ class MockUserRemoteDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNoteRemoteDataSource extends _i1.Mock
-    implements _i38.NoteRemoteDataSource {
+    implements _i37.NoteRemoteDataSource {
   MockNoteRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i13.Future<_i6.BaseResponse<_i12.NoteModel>> create(_i29.NoteDto? note) =>
+  _i13.Future<_i6.BaseResponse<_i12.NoteModel>> create(_i28.NoteDto? note) =>
       (super.noSuchMethod(
         Invocation.method(
           #create,
@@ -1996,7 +1994,7 @@ class MockNoteRemoteDataSource extends _i1.Mock
           #delete,
           [id],
         ),
-        returnValue: _i13.Future<String>.value(_i39.dummyValue<String>(
+        returnValue: _i13.Future<String>.value(_i38.dummyValue<String>(
           this,
           Invocation.method(
             #delete,
@@ -2051,7 +2049,7 @@ class MockNoteRemoteDataSource extends _i1.Mock
   @override
   _i13.Future<_i6.BaseResponse<_i12.NoteModel>> update(
     int? id,
-    _i29.NoteDto? note,
+    _i28.NoteDto? note,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2079,7 +2077,7 @@ class MockNoteRemoteDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNoteLocalDataSource extends _i1.Mock
-    implements _i40.NoteLocalDataSource {
+    implements _i39.NoteLocalDataSource {
   MockNoteLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -2101,7 +2099,7 @@ class MockNoteLocalDataSource extends _i1.Mock
           #insertAll,
           [notes],
         ),
-        returnValue: _i13.Future<String>.value(_i39.dummyValue<String>(
+        returnValue: _i13.Future<String>.value(_i38.dummyValue<String>(
           this,
           Invocation.method(
             #insertAll,
@@ -2116,7 +2114,7 @@ class MockNoteLocalDataSource extends _i1.Mock
           #clearAll,
           [],
         ),
-        returnValue: _i13.Future<String>.value(_i39.dummyValue<String>(
+        returnValue: _i13.Future<String>.value(_i38.dummyValue<String>(
           this,
           Invocation.method(
             #clearAll,
@@ -2130,7 +2128,7 @@ class MockNoteLocalDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSocketRemoteDataSource extends _i1.Mock
-    implements _i41.SocketRemoteDataSource {
+    implements _i40.SocketRemoteDataSource {
   MockSocketRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -2185,7 +2183,7 @@ class MockSocketRemoteDataSource extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalizationLocalDataSource extends _i1.Mock
-    implements _i42.LocalizationLocalDataSource {
+    implements _i41.LocalizationLocalDataSource {
   MockLocalizationLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
@@ -2228,35 +2226,35 @@ class MockThemeLocalDataSource extends _i1.Mock
       ) as _i13.Future<bool>);
 
   @override
-  _i13.Future<_i33.ThemeMode?> getSavedThemeMode() => (super.noSuchMethod(
+  _i13.Future<_i32.ThemeMode?> getSavedThemeMode() => (super.noSuchMethod(
         Invocation.method(
           #getSavedThemeMode,
           [],
         ),
-        returnValue: _i13.Future<_i33.ThemeMode?>.value(),
-      ) as _i13.Future<_i33.ThemeMode?>);
+        returnValue: _i13.Future<_i32.ThemeMode?>.value(),
+      ) as _i13.Future<_i32.ThemeMode?>);
 }
 
 /// A class which mocks [UserDao].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserDao extends _i1.Mock implements _i43.UserDao {
+class MockUserDao extends _i1.Mock implements _i42.UserDao {
   MockUserDao() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i13.Future<List<_i44.UserEntity>> findAll() => (super.noSuchMethod(
+  _i13.Future<List<_i43.UserEntity>> findAll() => (super.noSuchMethod(
         Invocation.method(
           #findAll,
           [],
         ),
         returnValue:
-            _i13.Future<List<_i44.UserEntity>>.value(<_i44.UserEntity>[]),
-      ) as _i13.Future<List<_i44.UserEntity>>);
+            _i13.Future<List<_i43.UserEntity>>.value(<_i43.UserEntity>[]),
+      ) as _i13.Future<List<_i43.UserEntity>>);
 
   @override
-  _i13.Future<List<int>> insertAll(List<_i44.UserEntity>? users) =>
+  _i13.Future<List<int>> insertAll(List<_i43.UserEntity>? users) =>
       (super.noSuchMethod(
         Invocation.method(
           #insertAll,
@@ -2266,13 +2264,13 @@ class MockUserDao extends _i1.Mock implements _i43.UserDao {
       ) as _i13.Future<List<int>>);
 
   @override
-  _i13.Future<_i44.UserEntity?> findById(int? id) => (super.noSuchMethod(
+  _i13.Future<_i43.UserEntity?> findById(int? id) => (super.noSuchMethod(
         Invocation.method(
           #findById,
           [id],
         ),
-        returnValue: _i13.Future<_i44.UserEntity?>.value(),
-      ) as _i13.Future<_i44.UserEntity?>);
+        returnValue: _i13.Future<_i43.UserEntity?>.value(),
+      ) as _i13.Future<_i43.UserEntity?>);
 
   @override
   _i13.Future<void> clearAll() => (super.noSuchMethod(
@@ -2288,23 +2286,23 @@ class MockUserDao extends _i1.Mock implements _i43.UserDao {
 /// A class which mocks [NoteDao].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNoteDao extends _i1.Mock implements _i45.NoteDao {
+class MockNoteDao extends _i1.Mock implements _i44.NoteDao {
   MockNoteDao() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i13.Future<List<_i46.NoteEntity>> findAll() => (super.noSuchMethod(
+  _i13.Future<List<_i45.NoteEntity>> findAll() => (super.noSuchMethod(
         Invocation.method(
           #findAll,
           [],
         ),
         returnValue:
-            _i13.Future<List<_i46.NoteEntity>>.value(<_i46.NoteEntity>[]),
-      ) as _i13.Future<List<_i46.NoteEntity>>);
+            _i13.Future<List<_i45.NoteEntity>>.value(<_i45.NoteEntity>[]),
+      ) as _i13.Future<List<_i45.NoteEntity>>);
 
   @override
-  _i13.Future<List<int>> insertAll(List<_i46.NoteEntity>? notes) =>
+  _i13.Future<List<int>> insertAll(List<_i45.NoteEntity>? notes) =>
       (super.noSuchMethod(
         Invocation.method(
           #insertAll,
@@ -2327,7 +2325,7 @@ class MockNoteDao extends _i1.Mock implements _i45.NoteDao {
 /// A class which mocks [AuthService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthService extends _i1.Mock implements _i47.AuthService {
+class MockAuthService extends _i1.Mock implements _i46.AuthService {
   MockAuthService() {
     _i1.throwOnMissingStub(this);
   }
@@ -2369,7 +2367,7 @@ class MockAuthService extends _i1.Mock implements _i47.AuthService {
       ) as _i13.Future<_i6.BaseResponse<_i24.AuthValidateModel>>);
 
   @override
-  _i13.Future<_i6.BaseResponse<void>> logout(_i35.LogoutDto? payload) =>
+  _i13.Future<_i6.BaseResponse<void>> logout(_i34.LogoutDto? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #logout,
@@ -2387,7 +2385,7 @@ class MockAuthService extends _i1.Mock implements _i47.AuthService {
 
   @override
   _i13.Future<_i6.BaseResponse<void>> register(
-          _i26.RegisterRequestModel? payload) =>
+          _i25.RegisterRequestModel? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #register,
@@ -2405,7 +2403,7 @@ class MockAuthService extends _i1.Mock implements _i47.AuthService {
 
   @override
   _i13.Future<_i6.BaseResponse<_i22.TokenModel>> refreshToken(
-          _i27.RefreshTokenDto? payload) =>
+          _i26.RefreshTokenDto? payload) =>
       (super.noSuchMethod(
         Invocation.method(
           #refreshToken,
@@ -2425,7 +2423,7 @@ class MockAuthService extends _i1.Mock implements _i47.AuthService {
 /// A class which mocks [UserService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserService extends _i1.Mock implements _i48.UserService {
+class MockUserService extends _i1.Mock implements _i47.UserService {
   MockUserService() {
     _i1.throwOnMissingStub(this);
   }
@@ -2466,14 +2464,14 @@ class MockUserService extends _i1.Mock implements _i48.UserService {
 /// A class which mocks [NoteService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNoteService extends _i1.Mock implements _i49.NoteService {
+class MockNoteService extends _i1.Mock implements _i48.NoteService {
   MockNoteService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i13.Future<_i6.BaseResponse<_i12.NoteModel>> createNote(
-          _i29.NoteDto? note) =>
+          _i28.NoteDto? note) =>
       (super.noSuchMethod(
         Invocation.method(
           #createNote,
@@ -2535,7 +2533,7 @@ class MockNoteService extends _i1.Mock implements _i49.NoteService {
   @override
   _i13.Future<_i6.BaseResponse<_i12.NoteModel>> updateNote(
     int? id,
-    _i29.NoteDto? note,
+    _i28.NoteDto? note,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2862,7 +2860,7 @@ class MockFlutterSecureStorage extends _i1.Mock
 /// A class which mocks [TokenManager].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTokenManager extends _i1.Mock implements _i50.TokenManager {
+class MockTokenManager extends _i1.Mock implements _i49.TokenManager {
   MockTokenManager() {
     _i1.throwOnMissingStub(this);
   }
@@ -2889,7 +2887,7 @@ class MockTokenManager extends _i1.Mock implements _i50.TokenManager {
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i51.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i50.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
@@ -2911,7 +2909,7 @@ class MockNetworkInfo extends _i1.Mock implements _i51.NetworkInfo {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSocketChannelFactory extends _i1.Mock
-    implements _i41.SocketChannelFactory {
+    implements _i40.SocketChannelFactory {
   MockSocketChannelFactory() {
     _i1.throwOnMissingStub(this);
   }

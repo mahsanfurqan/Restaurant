@@ -7,8 +7,6 @@ import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/refresh_token_dto.dart';
-import 'package:flutter_boilerplate/modules/auth/data/models/login_response_model.dart';
-import 'package:flutter_boilerplate/modules/auth/data/models/register_response_wrapper_model.dart';
 
 part 'generated/auth_service.g.dart';
 

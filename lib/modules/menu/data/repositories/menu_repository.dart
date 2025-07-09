@@ -4,10 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_boilerplate/modules/menu/data/data_sources/remote/menu_remote_data_source.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/category_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
-import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.dart';
-import 'package:flutter_boilerplate/modules/menu/data/models/menu_response_model.dart';
 import 'package:flutter_boilerplate/shared/responses/base_error_response.dart';
+import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 
 extension on DioException {
   BaseErrorResponse? get errorResponse => response?.data is Map<String, dynamic>
@@ -28,7 +27,7 @@ class MenuRepository {
     }
   }
 
-  Future<Either<Failure, MenuResponseModel>> createMenu(
+  Future<Either<Failure, BaseResponse<MenuModel>>> createMenu(
       MenuRequestModel body) async {
     try {
       final res = await remoteDataSource.createMenu(body);
@@ -38,10 +37,10 @@ class MenuRepository {
     }
   }
 
-  Future<Either<Failure, List<MenuModel>>> fetchMenus() async {
+  Future<Either<Failure, BaseResponse<List<MenuModel>>>> fetchMenus() async {
     try {
       final response = await remoteDataSource.getMenus();
-      return Right(response.data);
+      return Right(response);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
     }

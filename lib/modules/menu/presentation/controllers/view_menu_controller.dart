@@ -24,7 +24,7 @@ class ViewMenuController extends GetxController {
       (failure) => menuState.value = ResultState.failed(
           AppUtils.getErrorMessage(failure.error?.errors) ??
               'Failed to load menu data'),
-      (data) => menuState.value = ResultState.success(data),
+      (response) => menuState.value = ResultState.success(response.data ?? []),
     );
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter_boilerplate/modules/auth/data/repositories/auth_reposito
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
-import 'package:flutter_boilerplate/modules/auth/data/models/register_response_model.dart';
 import 'package:flutter_boilerplate/core/common/failures.dart';
 import 'package:dartz/dartz.dart';
 
@@ -16,7 +15,6 @@ class AuthController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    print('DEBUG: AuthController onInit - Starting auth check');
     authState.value = const ResultState.loading();
 
     // Add delay to ensure everything is initialized
@@ -31,7 +29,6 @@ class AuthController extends GetxController {
 
   Future<void> authCheck({bool forceValidate = false}) async {
     try {
-      print('DEBUG: AuthController authCheck - Starting validation');
       Either<Failure, AuthValidateModel> result;
       if (forceValidate) {
         result = await _repository.validateAuth();
@@ -39,15 +36,11 @@ class AuthController extends GetxController {
         result = await _repository.quickAuthCheck();
       }
       result.fold((failure) {
-        print(
-            'DEBUG: AuthController authCheck - Auth failed:  [31m${failure.message} [0m');
         authState.value = const ResultState.failed();
       }, (data) {
-        print('DEBUG: AuthController authCheck - Auth success: ${data.id}');
         authState.value = ResultState.success(data);
       });
     } catch (e) {
-      print('DEBUG: AuthController authCheck - Exception: $e');
       authState.value = const ResultState.failed();
     }
   }
