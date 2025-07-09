@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
 import 'package:flutter_boilerplate/core/common/failures.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _repository;
@@ -17,7 +18,6 @@ class AuthController extends GetxController {
     super.onInit();
     authState.value = const ResultState.loading();
 
-    // Add delay to ensure everything is initialized
     await Future.delayed(const Duration(milliseconds: 500));
     await authCheck();
   }
@@ -28,21 +28,18 @@ class AuthController extends GetxController {
   final registerState = Rx<ResultState<bool>>(const ResultState.initial());
 
   Future<void> authCheck({bool forceValidate = false}) async {
-    try {
-      Either<Failure, AuthValidateModel> result;
-      if (forceValidate) {
-        result = await _repository.validateAuth();
-      } else {
-        result = await _repository.quickAuthCheck();
-      }
-      result.fold((failure) {
-        authState.value = const ResultState.failed();
-      }, (data) {
-        authState.value = ResultState.success(data);
-      });
-    } catch (e) {
-      authState.value = const ResultState.failed();
+    Either<Failure, AuthValidateModel> result;
+    if (forceValidate) {
+      result = await _repository.validateAuth();
+    } else {
+      result = await _repository.quickAuthCheck();
     }
+    result.fold((failure) {
+      final message = AppUtils.getErrorMessage(failure.error?.errors);
+      authState.value = ResultState.failed(message);
+    }, (data) {
+      authState.value = ResultState.success(data);
+    });
   }
 
   void setLoggedInUsername(String username) {
@@ -53,7 +50,10 @@ class AuthController extends GetxController {
     registerState.value = const ResultState.loading();
     final result = await _repository.register(payload);
     result.fold(
-      (failure) => registerState.value = ResultState.failed(failure.message),
+      (failure) {
+        final message = AppUtils.getErrorMessage(failure.error?.errors);
+        registerState.value = ResultState.failed(message);
+      },
       (data) => registerState.value = const ResultState.success(true),
     );
   }

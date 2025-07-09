@@ -47,7 +47,7 @@ class NoteFormController extends GetxController {
         : await _repository.updateNote(note?.id ?? 0, dto);
     result.fold((failure) {
       final message = AppUtils.getErrorMessage(failure.error?.errors);
-      saveNoteState.value = ResultFailed();
+      saveNoteState.value = ResultFailed(message);
       onFailed?.call(message ?? '');
     }, (data) {
       saveNoteState.value = ResultSuccess(true);

@@ -65,7 +65,7 @@ class AddMenuController extends GetxController {
     final result = await _menuRepository.createMenu(request);
     result.fold((failure) {
       final message = AppUtils.getErrorMessage(failure.error?.errors);
-      submitState.value = ResultState.failed();
+      submitState.value = ResultState.failed(message);
       onFailed?.call(message ?? '');
     }, (response) {
       submitState.value = const ResultState.success(true);

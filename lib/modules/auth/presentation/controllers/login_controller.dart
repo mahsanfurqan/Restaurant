@@ -42,8 +42,9 @@ class LoginController extends GetxController {
         await _repository.login(LoginDto(email: email, password: password));
     result.fold(
       (failure) {
-        loginState.value = ResultState.failed(failure.message);
-        onFailed?.call(failure.message ?? 'Login gagal');
+        final message = AppUtils.getErrorMessage(failure.error?.errors);
+        loginState.value = ResultState.failed(message);
+        onFailed?.call(message ?? 'Login gagal');
       },
       (response) async {
         loginState.value = ResultState.success(response);
