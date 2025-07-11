@@ -9,12 +9,19 @@ import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import '../controllers/settings_controller.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/controllers/theme_controller.dart';
 import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
+import '../widgets/restaurant_info_widget.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_input.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_button.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchUserProfile();
+    });
+
     final theme = context.theme;
     final localizationCtrl = Get.find<LocalizationController>();
     final themeCtrl = Get.find<ThemeController>();
@@ -22,10 +29,11 @@ class SettingsPage extends GetView<SettingsController> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.settingsTitle(),
-          style: AppFonts.lgBold.copyWith(color: Colors.white),
+          style: AppFonts.lgBold.copyWith(color: Colors.black),
         ),
         foregroundColor: Colors.white,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       bottomNavigationBar: CustomNavbar(
         selectedIndex: 1,
@@ -45,6 +53,7 @@ class SettingsPage extends GetView<SettingsController> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 28,
@@ -57,18 +66,170 @@ class SettingsPage extends GetView<SettingsController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('-',
-                            style: AppFonts.mdSemiBold
-                                .copyWith(color: AppColors.green)),
-                        const SizedBox(height: 4),
-                        Text('-',
-                            style: AppFonts.smRegular.copyWith(
-                                color: AppColors.green.withOpacity(0.7))),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(AppLocalizations.email(),
+                                      style: AppFonts.smRegular
+                                          .copyWith(color: Colors.grey[700])),
+                                  Obx(() => Text(
+                                      controller.userEmail.value.isEmpty
+                                          ? '-'
+                                          : controller.userEmail.value,
+                                      style: AppFonts.mdSemiBold
+                                          .copyWith(color: AppColors.green))),
+                                  const SizedBox(height: 8),
+                                  Text(AppLocalizations.username(),
+                                      style: AppFonts.smRegular
+                                          .copyWith(color: Colors.grey[700])),
+                                  Obx(() => Text(
+                                      controller.userName.value.isEmpty
+                                          ? '-'
+                                          : controller.userName.value,
+                                      style: AppFonts.smRegular.copyWith(
+                                          color: AppColors.green
+                                              .withOpacity(0.7)))),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.edit,
+                                  color: AppColors.green),
+                              onPressed: () async {
+                                final email = controller.userEmail.value;
+                                final username = controller.userName.value;
+                                final emailController =
+                                    TextEditingController(text: email);
+                                final userNameController =
+                                    TextEditingController(text: username);
+                                final result = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(AppLocalizations.editProfile()),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        AppInput(
+                                          controller: emailController,
+                                          hintText: AppLocalizations
+                                              .emailPlaceholder(),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        AppInput(
+                                          controller: userNameController,
+                                          hintText: AppLocalizations
+                                              .registerUsernamePlaceholder(),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      AppButton.text(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        text: AppLocalizations.cancel(),
+                                      ),
+                                      AppButton(
+                                        onPressed: () async {
+                                          final authState = controller
+                                              .authCtrl.authState.value;
+                                          final userId = authState.maybeWhen(
+                                            success: (data) => data.id,
+                                            orElse: () => null,
+                                          );
+                                          if (userId != null) {
+                                            final success = await controller
+                                                .updateUserProfile(userId, {
+                                              'email': emailController.text,
+                                              'username':
+                                                  userNameController.text,
+                                            });
+                                            Navigator.of(context).pop(success);
+                                          }
+                                        },
+                                        text: AppLocalizations.save(),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (result == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(AppLocalizations
+                                            .profileUpdateSuccess())),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
+            ),
+          ),
+          const SizedBox(height: 28),
+          Text(
+            AppLocalizations.accountTitle(),
+            style: AppFonts.lgBold.copyWith(color: AppColors.green),
+          ),
+          const SizedBox(height: 12),
+          RestaurantInfoWidget(),
+          const SizedBox(height: 12),
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.logout, color: Colors.red),
+                  title: Text(AppLocalizations.logout(),
+                      style: AppFonts.mdSemiBold.copyWith(color: Colors.red)),
+                  onTap: () async {
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(AppLocalizations.confirm()),
+                        content: Text(AppLocalizations.logoutMessage()),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Get.back(result: false),
+                            child: Text(AppLocalizations.cancel()),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Get.back(result: true),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red),
+                            child: Text(AppLocalizations.logout()),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirm == true) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) =>
+                            const Center(child: CircularProgressIndicator()),
+                      );
+                      await controller.logout(
+                        onSuccess: () {
+                          Get.back();
+                          Get.offAllNamed(AppRoutes.login);
+                          AlertDialogHelper.showSuccess(
+                            AppLocalizations.logoutSuccess(),
+                            title: AppLocalizations.successTitle(),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 28),
@@ -144,76 +305,6 @@ class SettingsPage extends GetView<SettingsController> {
                     ),
                   );
                 }),
-              ],
-            ),
-          ),
-          const SizedBox(height: 28),
-          Text(
-            AppLocalizations.accountTitle(),
-            style: AppFonts.lgBold.copyWith(color: AppColors.green),
-          ),
-          const SizedBox(height: 12),
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.restaurant_menu_rounded,
-                      color: AppColors.green),
-                  title: Text(AppLocalizations.restaurantSettingTitle(),
-                      style: AppFonts.mdSemiBold),
-                  subtitle: Text(AppLocalizations.restaurantSettingSubtitle(),
-                      style: AppFonts.smRegular),
-                  onTap: () {
-                    // Navigasi ke halaman pengaturan restaurant
-                  },
-                ),
-                Divider(height: 0),
-                ListTile(
-                  leading: const Icon(Icons.logout, color: Colors.red),
-                  title: Text(AppLocalizations.logout(),
-                      style: AppFonts.mdSemiBold.copyWith(color: Colors.red)),
-                  onTap: () async {
-                    final confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Konfirmasi'),
-                        content: const Text('Apakah Anda yakin ingin logout?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Get.back(result: false),
-                            child: const Text('Batal'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => Get.back(result: true),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red),
-                            child: const Text('Logout'),
-                          ),
-                        ],
-                      ),
-                    );
-                    if (confirm == true) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) =>
-                            const Center(child: CircularProgressIndicator()),
-                      );
-                      await controller.logout(
-                        onSuccess: () {
-                          Get.back(); // close loading
-                          Get.offAllNamed(AppRoutes.login);
-                          AlertDialogHelper.showSuccess(
-                            AppLocalizations.logoutSuccess(),
-                            title: AppLocalizations.successTitle(),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
               ],
             ),
           ),

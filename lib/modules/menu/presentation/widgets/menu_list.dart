@@ -41,27 +41,24 @@ class MenuListItem extends StatelessWidget {
                         fit: BoxFit.cover,
                       )
                     : Image.asset(
-                        'assets/images/nasigoreng.png',
+                        'assets/images/load.jpg',
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
                       ),
               ),
               const SizedBox(width: 12),
-              // Informasi menu
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nama menu
                     Text(
-                      menu.name ?? 'No Name',
+                      menu.name,
                       style: AppFonts.lgBold,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 6),
-                    // Harga menu
                     Text(
                       menu.price?.toCurrencyFormat ?? '-',
                       style: AppFonts.smMedium.copyWith(

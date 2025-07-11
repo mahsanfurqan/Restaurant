@@ -8,6 +8,7 @@ import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.
 import 'package:flutter_boilerplate/shared/responses/base_error_response.dart';
 import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/storage_model.dart';
+import 'package:flutter_boilerplate/modules/menu/data/models/restaurant_model.dart';
 
 extension on DioException {
   BaseErrorResponse? get errorResponse => response?.data is Map<String, dynamic>
@@ -55,6 +56,35 @@ class MenuRepository {
       final response = await remoteDataSource.uploadFileWithDio(
           filePath: filePath, folder: folder);
       return Right(response.data!);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.errorResponse));
+    }
+  }
+
+  Future<Either<Failure, void>> deleteMenu(int id) async {
+    try {
+      await remoteDataSource.deleteMenu(id);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.errorResponse));
+    }
+  }
+
+  Future<Either<Failure, BaseResponse<RestaurantModel>>> getRestaurant(
+      int id) async {
+    try {
+      final res = await remoteDataSource.getRestaurant(id);
+      return Right(res);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.errorResponse));
+    }
+  }
+
+  Future<Either<Failure, BaseResponse<RestaurantModel>>> updateRestaurant(
+      int id, Map<String, dynamic> body) async {
+    try {
+      final res = await remoteDataSource.updateRestaurant(id, body);
+      return Right(res);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
     }

@@ -17,6 +17,7 @@ import 'package:flutter_boilerplate/modules/menu/presentation/bindings/add_menu_
 import 'package:flutter_boilerplate/modules/menu/presentation/bindings/view_menu_binding.dart';
 import 'package:flutter_boilerplate/modules/settings/pages/settings_page.dart';
 import 'package:flutter_boilerplate/modules/settings/controllers/settings_controller.dart';
+import 'package:flutter_boilerplate/modules/settings/bindings/settings_binding.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -77,9 +78,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.settings,
       page: () => SettingsPage(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut<SettingsController>(() => SettingsController());
-      }),
+      binding: SettingsBinding(),
     ),
   ];
 }

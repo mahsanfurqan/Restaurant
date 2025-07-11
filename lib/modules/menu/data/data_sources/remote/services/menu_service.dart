@@ -4,6 +4,7 @@ import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/category_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
+import 'package:flutter_boilerplate/modules/menu/data/models/restaurant_model.dart';
 
 part 'generated/menu_service.g.dart';
 
@@ -19,4 +20,16 @@ abstract class MenuService {
 
   @GET('/menus')
   Future<BaseResponse<List<MenuModel>>> getMenus();
+
+  @DELETE('/menus/{id}')
+  Future<void> deleteMenu(@Path('id') int id);
+
+  @GET('/restaurant/{id}')
+  Future<BaseResponse<RestaurantModel>> getRestaurant(@Path('id') int id);
+
+  @PATCH('/restaurant/{id}')
+  Future<BaseResponse<RestaurantModel>> updateRestaurant(
+    @Path('id') int id,
+    @Body() Map<String, dynamic> body,
+  );
 }

@@ -12,6 +12,7 @@ import 'package:flutter_boilerplate/shared/widgets/app_input.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_fill_layout.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_refresher.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/controllers/view_menu_controller.dart';
 
 class DetailMenu extends StatelessWidget {
   final MenuModel menu;
@@ -138,7 +139,7 @@ class _MenuPrice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      menu.price?.toCurrencyFormat ?? '-', // langsung pakai .toCurrencyFormat
+      menu.price?.toCurrencyFormat ?? '-',
       style: AppFonts.lgMedium.copyWith(color: Colors.black87),
     );
   }
@@ -206,12 +207,17 @@ class _MenuActionRow extends StatelessWidget {
               builder: (context) =>
                   const Center(child: CircularProgressIndicator()),
             );
-            await Future.delayed(const Duration(seconds: 1));
+            final controller = Get.find<ViewMenuController>();
+            final success = await controller.deleteMenu(menu.id!);
             Get.back();
-            Get.back();
-            await AlertDialogHelper.showSuccess(
-                AppLocalizations.deleteMenuSuccess());
-            if (onEditSuccess != null) onEditSuccess!();
+            if (success) {
+              Get.back();
+              await AlertDialogHelper.showSuccess(
+                  AppLocalizations.deleteMenuSuccess());
+              if (onEditSuccess != null) onEditSuccess!();
+            } else {
+              await AlertDialogHelper.showError('Gagal menghapus menu');
+            }
           }
         },
         text: AppLocalizations.deleteMenu(),

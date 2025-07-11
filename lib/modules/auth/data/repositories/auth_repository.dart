@@ -41,7 +41,7 @@ class AuthRepository {
       final user = await _userRemoteDataSource.getUserById(
         authSession.id ?? 0,
       );
-      return Right(user.data!);
+      return user != null ? Right(user) : const Left(AuthFailure());
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
     }

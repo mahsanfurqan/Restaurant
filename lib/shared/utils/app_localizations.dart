@@ -168,4 +168,11 @@ abstract class AppLocalizations {
   static String logoutSuccess() => 'logoutSuccess'.tr;
   static String logoutFailed() => 'logoutFailed'.tr;
   static String retry() => 'retry'.tr;
+  static String editProfile() => 'editProfile'.tr;
+  static String profileUpdateSuccess() => 'profileUpdateSuccess'.tr;
+  static String restaurantUpdateSuccess() => 'restaurantUpdateSuccess'.tr;
+  static String restaurantUpdateFailed() => 'restaurantUpdateFailed'.tr;
+  static String restaurantNotFound() => 'restaurantNotFound'.tr;
+  static String editRestaurant() => 'editRestaurant'.tr;
+  static String restaurantNameRequired() => 'restaurantNameRequired'.tr;
 }

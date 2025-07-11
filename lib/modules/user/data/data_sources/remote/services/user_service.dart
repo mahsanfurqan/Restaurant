@@ -14,9 +14,13 @@ abstract class UserService {
     ParseErrorLogger? errorLogger,
   }) = _UserService;
 
-  @GET('/users/{id}')
+  @GET('/user/{id}')
   Future<BaseResponse<UserModel>> getUserById(@Path() int id);
 
   @GET('/auth/me')
   Future<UserMeModel> getMe();
+
+  @PATCH('/user/{id}')
+  Future<BaseResponse<UserModel>> updateUser(
+      @Path() int id, @Body() Map<String, dynamic> body);
 }

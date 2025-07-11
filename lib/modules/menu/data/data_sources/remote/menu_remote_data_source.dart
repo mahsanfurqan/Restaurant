@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/category_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
+import 'package:flutter_boilerplate/modules/menu/data/models/restaurant_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/storage_model.dart';
 import 'package:flutter_boilerplate/shared/responses/base_response.dart';
 
@@ -45,5 +46,18 @@ class MenuRemoteDataSource {
           StorageUploadResponseModel.fromJson(json as Map<String, dynamic>),
     );
     // saya buat seperti karna retrofit_generator Dart saat ini belum stabil untuk upload file multipart secara native mass
+  }
+
+  Future<void> deleteMenu(int id) {
+    return _service.deleteMenu(id);
+  }
+
+  Future<BaseResponse<RestaurantModel>> getRestaurant(int id) {
+    return _service.getRestaurant(id);
+  }
+
+  Future<BaseResponse<RestaurantModel>> updateRestaurant(
+      int id, Map<String, dynamic> body) {
+    return _service.updateRestaurant(id, body);
   }
 }

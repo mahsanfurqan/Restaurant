@@ -165,6 +165,13 @@ class AppTranslations extends Translations {
         'logoutSuccess': 'Logout successful',
         'logoutFailed': 'Logout failed',
         'retry': 'Retry',
+        'editProfile': 'Edit Profile',
+        'profileUpdateSuccess': 'Profile updated successfully',
+        'restaurantUpdateSuccess': 'Restaurant data updated successfully',
+        'restaurantUpdateFailed': 'Failed to update restaurant data',
+        'restaurantNotFound': 'Restaurant data not found',
+        'editRestaurant': 'Edit Restaurant',
+        'restaurantNameRequired': 'Restaurant name is required',
       },
       'id': {
         'selectFromGallery': 'Pilih dari Galeri',
@@ -327,6 +334,13 @@ class AppTranslations extends Translations {
         'logoutSuccess': 'Berhasil logout',
         'logoutFailed': 'Gagal logout',
         'retry': 'Coba Lagi',
+        'editProfile': 'Edit Profil',
+        'profileUpdateSuccess': 'Profil berhasil diupdate',
+        'restaurantUpdateSuccess': 'Berhasil update data restoran',
+        'restaurantUpdateFailed': 'Gagal update data restoran',
+        'restaurantNotFound': 'Data restoran tidak ditemukan',
+        'editRestaurant': 'Edit Restoran',
+        'restaurantNameRequired': 'Nama restoran wajib diisi',
       },
     };
   }

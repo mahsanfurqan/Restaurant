@@ -10,6 +10,7 @@ class UserModel with _$UserModel {
     final int? id,
     final String? username,
     final String? name,
+    final String? email,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +21,7 @@ class UserModel with _$UserModel {
       id: entity.id,
       username: entity.username,
       name: entity.name,
+      email: null,
     );
   }
 }
@@ -30,6 +32,7 @@ extension UserModelExt on UserModel {
       id: id,
       username: username,
       name: name,
+      email: email,
     );
   }
 }

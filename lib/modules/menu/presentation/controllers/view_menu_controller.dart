@@ -34,4 +34,9 @@ class ViewMenuController extends GetxController {
   Future<void> refreshMenu() async {
     await fetchMenus();
   }
+
+  Future<bool> deleteMenu(int id) async {
+    final result = await _menuRepository.deleteMenu(id);
+    return result.isRight();
+  }
 }

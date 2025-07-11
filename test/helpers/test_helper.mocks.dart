@@ -1930,21 +1930,13 @@ class MockUserRemoteDataSource extends _i1.Mock
   }
 
   @override
-  _i13.Future<_i6.BaseResponse<_i21.UserModel>> getUserById(int? id) =>
-      (super.noSuchMethod(
+  _i13.Future<_i21.UserModel?> getUserById(int? id) => (super.noSuchMethod(
         Invocation.method(
           #getUserById,
           [id],
         ),
-        returnValue: _i13.Future<_i6.BaseResponse<_i21.UserModel>>.value(
-            _FakeBaseResponse_7<_i21.UserModel>(
-          this,
-          Invocation.method(
-            #getUserById,
-            [id],
-          ),
-        )),
-      ) as _i13.Future<_i6.BaseResponse<_i21.UserModel>>);
+        returnValue: _i13.Future<_i21.UserModel?>.value(),
+      ) as _i13.Future<_i21.UserModel?>);
 
   @override
   _i13.Future<_i7.UserMeModel> getMe() => (super.noSuchMethod(
@@ -1960,6 +1952,32 @@ class MockUserRemoteDataSource extends _i1.Mock
           ),
         )),
       ) as _i13.Future<_i7.UserMeModel>);
+
+  @override
+  _i13.Future<_i6.BaseResponse<_i21.UserModel>> updateUser(
+    int? id,
+    Map<String, dynamic>? body,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUser,
+          [
+            id,
+            body,
+          ],
+        ),
+        returnValue: _i13.Future<_i6.BaseResponse<_i21.UserModel>>.value(
+            _FakeBaseResponse_7<_i21.UserModel>(
+          this,
+          Invocation.method(
+            #updateUser,
+            [
+              id,
+              body,
+            ],
+          ),
+        )),
+      ) as _i13.Future<_i6.BaseResponse<_i21.UserModel>>);
 }
 
 /// A class which mocks [NoteRemoteDataSource].
@@ -2459,6 +2477,32 @@ class MockUserService extends _i1.Mock implements _i47.UserService {
           ),
         )),
       ) as _i13.Future<_i7.UserMeModel>);
+
+  @override
+  _i13.Future<_i6.BaseResponse<_i21.UserModel>> updateUser(
+    int? id,
+    Map<String, dynamic>? body,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUser,
+          [
+            id,
+            body,
+          ],
+        ),
+        returnValue: _i13.Future<_i6.BaseResponse<_i21.UserModel>>.value(
+            _FakeBaseResponse_7<_i21.UserModel>(
+          this,
+          Invocation.method(
+            #updateUser,
+            [
+              id,
+              body,
+            ],
+          ),
+        )),
+      ) as _i13.Future<_i6.BaseResponse<_i21.UserModel>>);
 }
 
 /// A class which mocks [NoteService].

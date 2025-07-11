@@ -8,8 +8,19 @@ class UserRemoteDataSource {
 
   const UserRemoteDataSource(this._service);
 
-  Future<BaseResponse<UserModel>> getUserById(int id) =>
-      _service.getUserById(id);
+  Future<UserModel?> getUserById(int id) async {
+    try {
+      final response = await _service.getUserById(id);
+      return response.data;
+    } catch (e) {
+      return null;
+    }
+  }
 
   Future<UserMeModel> getMe() => _service.getMe();
+
+  Future<BaseResponse<UserModel>> updateUser(
+      int id, Map<String, dynamic> body) {
+    return _service.updateUser(id, body);
+  }
 }
