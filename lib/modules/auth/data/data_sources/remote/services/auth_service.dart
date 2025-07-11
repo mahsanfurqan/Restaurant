@@ -21,8 +21,8 @@ abstract class AuthService {
   @POST('/auth/login')
   Future<BaseResponse<TokenModel>> login(@Body() LoginDto payload);
 
-  @GET('/auth/validate')
-  Future<BaseResponse<AuthValidateModel>> validateAuth();
+  @GET('/auth/me')
+  Future<BaseResponse<AuthValidateModel>> getUserFromToken();
 
   @POST('/auths/logout')
   Future<BaseResponse<void>> logout(@Body() LogoutDto payload);

@@ -28,18 +28,16 @@ class AuthController extends GetxController {
   final registerState = Rx<ResultState<bool>>(const ResultState.initial());
 
   Future<void> authCheck({bool forceValidate = false}) async {
-    Either<Failure, AuthValidateModel> result;
-    if (forceValidate) {
-      result = await _repository.validateAuth();
-    } else {
-      result = await _repository.quickAuthCheck();
-    }
-    result.fold((failure) {
-      final message = AppUtils.getErrorMessage(failure.error?.errors);
-      authState.value = ResultState.failed(message);
-    }, (data) {
-      authState.value = ResultState.success(data);
-    });
+    final result = await _repository.getUserFromToken();
+
+    result.fold(
+      (failure) {
+        authState.value = const ResultState.failed("User tidak valid.");
+      },
+      (data) {
+        authState.value = ResultState.success(data);
+      },
+    );
   }
 
   void setLoggedInUsername(String username) {

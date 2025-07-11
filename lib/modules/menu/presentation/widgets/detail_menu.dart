@@ -29,7 +29,7 @@ class DetailMenu extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: _MenuImage()),
+            Center(child: _MenuImage(menu: menu)),
             const SizedBox(height: 24),
             _MenuInfoRow(menu: menu, onEditSuccess: onEditSuccess),
             const SizedBox(height: 12),
@@ -37,9 +37,17 @@ class DetailMenu extends StatelessWidget {
             const SizedBox(height: 24),
             _MenuDescription(menu: menu),
             const SizedBox(height: 24),
-            Center(
-                child:
-                    _MenuActionRow(menu: menu, onEditSuccess: onEditSuccess)),
+            Column(
+              children: [
+                const SizedBox(height: 16),
+                Divider(color: Colors.grey.shade300, thickness: 1),
+                const SizedBox(height: 16),
+                Center(
+                  child:
+                      _MenuActionRow(menu: menu, onEditSuccess: onEditSuccess),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -48,15 +56,25 @@ class DetailMenu extends StatelessWidget {
 }
 
 class _MenuImage extends StatelessWidget {
-  const _MenuImage();
+  final MenuModel menu;
+  const _MenuImage({required this.menu});
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/images/placeholder.png',
-      width: 200,
-      height: 200,
-      fit: BoxFit.cover,
-    );
+    if (menu.photoUrl.isNotEmpty) {
+      return Image.network(
+        menu.photoUrl,
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.asset(
+        'assets/images/placeholder.png',
+        width: 200,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    }
   }
 }
 
@@ -86,11 +104,11 @@ class _MenuInfoRow extends StatelessWidget {
             border: Border.all(color: AppColors.green, width: 1.5),
           ),
           child: Text(
-            (menu.categories.name ?? '') == 'categoryFood'
+            (menu.category.name ?? '') == 'categoryFood'
                 ? AppLocalizations.categoryFood()
-                : (menu.categories.name ?? '') == 'categoryDrink'
+                : (menu.category.name ?? '') == 'categoryDrink'
                     ? AppLocalizations.categoryDrink()
-                    : (menu.categories.name ?? ''),
+                    : (menu.category.name ?? ''),
             style: AppFonts.smBold.copyWith(color: AppColors.green),
           ),
         ),
@@ -116,10 +134,11 @@ class _MenuInfoRow extends StatelessWidget {
 class _MenuPrice extends StatelessWidget {
   final MenuModel menu;
   const _MenuPrice({required this.menu});
+
   @override
   Widget build(BuildContext context) {
     return Text(
-      int.tryParse(menu.price ?? '')?.toCurrencyFormat ?? '-',
+      menu.price?.toCurrencyFormat ?? '-', // langsung pakai .toCurrencyFormat
       style: AppFonts.lgMedium.copyWith(color: Colors.black87),
     );
   }
@@ -155,49 +174,53 @@ class _MenuActionRow extends StatelessWidget {
   final MenuModel menu;
   final VoidCallback? onEditSuccess;
   const _MenuActionRow({required this.menu, this.onEditSuccess});
+
   @override
   Widget build(BuildContext context) {
-    return AppButton(
-      onPressed: () async {
-        final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(AppLocalizations.confirm()),
-            content: Text(AppLocalizations.deleteMenuConfirmation()),
-            actions: [
-              AppButton.text(
-                onPressed: () => Get.back(result: false),
-                text: AppLocalizations.cancel(),
-              ),
-              AppButton(
-                onPressed: () => Get.back(result: true),
-                text: AppLocalizations.deleteMenu(),
-                backgroundColor: Colors.red,
-              ),
-            ],
-          ),
-        );
-        if (confirm == true) {
-          showDialog(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: AppButton(
+        onPressed: () async {
+          final confirm = await showDialog<bool>(
             context: context,
-            barrierDismissible: false,
-            builder: (context) =>
-                const Center(child: CircularProgressIndicator()),
+            builder: (context) => AlertDialog(
+              title: Text(AppLocalizations.confirm()),
+              content: Text(AppLocalizations.deleteMenuConfirmation()),
+              actions: [
+                AppButton.text(
+                  onPressed: () => Get.back(result: false),
+                  text: AppLocalizations.cancel(),
+                ),
+                AppButton(
+                  onPressed: () => Get.back(result: true),
+                  text: AppLocalizations.deleteMenu(),
+                  backgroundColor: Colors.red,
+                ),
+              ],
+            ),
           );
-          await Future.delayed(const Duration(seconds: 1));
-          Get.back(); // tutup loading
-          Get.back(); // tutup bottomsheet
-          await AlertDialogHelper.showSuccess(
-              AppLocalizations.deleteMenuSuccess());
-          if (onEditSuccess != null) onEditSuccess!();
-        }
-      },
-      text: AppLocalizations.deleteMenu(),
-      prefixIcon: const Icon(Icons.delete, color: Colors.white),
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      width: 140,
-      height: 44,
+          if (confirm == true) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) =>
+                  const Center(child: CircularProgressIndicator()),
+            );
+            await Future.delayed(const Duration(seconds: 1));
+            Get.back();
+            Get.back();
+            await AlertDialogHelper.showSuccess(
+                AppLocalizations.deleteMenuSuccess());
+            if (onEditSuccess != null) onEditSuccess!();
+          }
+        },
+        text: AppLocalizations.deleteMenu(),
+        prefixIcon: const Icon(Icons.delete, color: Colors.white),
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        height: 44,
+        alignment: MainAxisAlignment.center,
+      ),
     );
   }
 }
@@ -229,7 +252,7 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
                 widget.menu.description == 'descMatcha'
             ? ''
             : widget.menu.description);
-    kategori = widget.menu.categories.name;
+    kategori = widget.menu.category.name;
   }
 
   @override

@@ -40,33 +40,25 @@ class LoginController extends GetxController {
 
     final result =
         await _repository.login(LoginDto(email: email, password: password));
+
     result.fold(
       (failure) {
         final message = AppUtils.getErrorMessage(failure.error?.errors);
         loginState.value = ResultState.failed(message);
-        onFailed?.call(message ?? 'Login gagal');
+        onFailed?.call(message ?? '');
       },
       (response) async {
+        await _repository.createAuthFromToken();
+
+        final authCtrl = Get.find<AuthController>();
+        await authCtrl.authCheck(forceValidate: true);
+
+        authCtrl.setLoggedInUsername(email);
+
         loginState.value = ResultState.success(response);
         if (response.data != null) {
           onSuccess?.call(response.data!);
         }
-        final authCtrl = Get.find<AuthController>();
-        authCtrl.setLoggedInUsername(email);
-
-        // Create auth session from token since validateAuth endpoint doesn't exist
-        final authResult = await _repository.createAuthFromToken();
-        authResult.fold(
-          (failure) {
-            print('DEBUG: Failed to create auth session: ${failure.message}');
-            // Still consider login successful, just update auth state
-            authCtrl.authState.value = const ResultState.failed();
-          },
-          (authData) {
-            print('DEBUG: Auth session created successfully: ${authData.id}');
-            authCtrl.authState.value = ResultState.success(authData);
-          },
-        );
       },
     );
   }

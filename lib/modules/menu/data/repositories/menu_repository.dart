@@ -7,6 +7,7 @@ import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.dart';
 import 'package:flutter_boilerplate/shared/responses/base_error_response.dart';
 import 'package:flutter_boilerplate/shared/responses/base_response.dart';
+import 'package:flutter_boilerplate/modules/menu/data/models/storage_model.dart';
 
 extension on DioException {
   BaseErrorResponse? get errorResponse => response?.data is Map<String, dynamic>
@@ -41,6 +42,19 @@ class MenuRepository {
     try {
       final response = await remoteDataSource.getMenus();
       return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(e.errorResponse));
+    }
+  }
+
+  Future<Either<Failure, StorageUploadResponseModel>> uploadFile({
+    required String filePath,
+    required String folder,
+  }) async {
+    try {
+      final response = await remoteDataSource.uploadFileWithDio(
+          filePath: filePath, folder: folder);
+      return Right(response.data!);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
     }

@@ -10,6 +10,7 @@ class AuthValidateModel with _$AuthValidateModel {
     String? username,
     List<String>? hasGroups,
     List<String>? hasPermissions,
+    final int? restaurantId,
   }) = _AuthValidateModel;
 
   factory AuthValidateModel.fromJson(Map<String, dynamic> json) =>

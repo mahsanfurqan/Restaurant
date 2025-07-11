@@ -1359,24 +1359,6 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
 
   @override
   _i13.Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>
-      validateAuth() => (super.noSuchMethod(
-            Invocation.method(
-              #validateAuth,
-              [],
-            ),
-            returnValue: _i13
-                .Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>.value(
-                _FakeEither_5<_i20.Failure, _i24.AuthValidateModel>(
-              this,
-              Invocation.method(
-                #validateAuth,
-                [],
-              ),
-            )),
-          ) as _i13.Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>);
-
-  @override
-  _i13.Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>
       quickAuthCheck() => (super.noSuchMethod(
             Invocation.method(
               #quickAuthCheck,
@@ -1467,6 +1449,24 @@ class MockAuthRepository extends _i1.Mock implements _i19.AuthRepository {
         )),
       ) as _i13
           .Future<_i4.Either<_i20.Failure, _i6.BaseResponse<_i22.TokenModel>>>);
+
+  @override
+  _i13.Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>
+      getUserFromToken() => (super.noSuchMethod(
+            Invocation.method(
+              #getUserFromToken,
+              [],
+            ),
+            returnValue: _i13
+                .Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>.value(
+                _FakeEither_5<_i20.Failure, _i24.AuthValidateModel>(
+              this,
+              Invocation.method(
+                #getUserFromToken,
+                [],
+              ),
+            )),
+          ) as _i13.Future<_i4.Either<_i20.Failure, _i24.AuthValidateModel>>);
 }
 
 /// A class which mocks [NoteRepository].
@@ -1774,10 +1774,10 @@ class MockAuthRemoteDataSource extends _i1.Mock
       ) as _i13.Future<_i6.BaseResponse<_i22.TokenModel>>);
 
   @override
-  _i13.Future<_i6.BaseResponse<_i24.AuthValidateModel>> validateAuth() =>
+  _i13.Future<_i6.BaseResponse<_i24.AuthValidateModel>> getUserFromToken() =>
       (super.noSuchMethod(
         Invocation.method(
-          #validateAuth,
+          #getUserFromToken,
           [],
         ),
         returnValue:
@@ -1785,7 +1785,7 @@ class MockAuthRemoteDataSource extends _i1.Mock
                 _FakeBaseResponse_7<_i24.AuthValidateModel>(
           this,
           Invocation.method(
-            #validateAuth,
+            #getUserFromToken,
             [],
           ),
         )),
@@ -2349,10 +2349,10 @@ class MockAuthService extends _i1.Mock implements _i46.AuthService {
       ) as _i13.Future<_i6.BaseResponse<_i22.TokenModel>>);
 
   @override
-  _i13.Future<_i6.BaseResponse<_i24.AuthValidateModel>> validateAuth() =>
+  _i13.Future<_i6.BaseResponse<_i24.AuthValidateModel>> getUserFromToken() =>
       (super.noSuchMethod(
         Invocation.method(
-          #validateAuth,
+          #getUserFromToken,
           [],
         ),
         returnValue:
@@ -2360,7 +2360,7 @@ class MockAuthService extends _i1.Mock implements _i46.AuthService {
                 _FakeBaseResponse_7<_i24.AuthValidateModel>(
           this,
           Invocation.method(
-            #validateAuth,
+            #getUserFromToken,
             [],
           ),
         )),

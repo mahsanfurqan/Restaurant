@@ -10,7 +10,7 @@ final List<Map<String, dynamic>> dummyMenuList = [
       'id': '1',
       'name': 'categoryFood',
     },
-    'imageUrl': 'assets/images/nasigoreng.jpg',
+    'photoUrl': 'assets/images/nasigoreng.jpg',
   },
   {
     'id': '2',
@@ -23,6 +23,6 @@ final List<Map<String, dynamic>> dummyMenuList = [
       'id': '2',
       'name': 'categoryDrink',
     },
-    'imageUrl': 'assets/images/matcha.jpg',
+    'photoUrl': 'assets/images/matcha.jpg',
   },
 ];

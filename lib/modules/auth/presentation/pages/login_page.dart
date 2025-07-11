@@ -6,7 +6,6 @@ import 'package:flutter_boilerplate/shared/helpers/bottom_sheet_helper.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
-import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_button.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_input.dart';
@@ -167,10 +166,7 @@ class LoginPage extends GetView<LoginController> {
                                           BottomSheetHelper.showError(message);
                                         }
                                       },
-                                      onSuccess: (_) async {
-                                        // Middleware will handle redirect automatically
-                                        // No need for manual redirect here
-                                      },
+                                      onSuccess: (_) async {},
                                     ),
                                     text: AppLocalizations.login(),
                                     backgroundColor: AppColors.green,

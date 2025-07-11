@@ -29,9 +29,24 @@ class AddMenuPage extends GetView<AddMenuController> {
           child: ListView(
             children: [
               AppMediaInput.image(
-                onSelect: (file) {
-                  controller.image.value =
+                onSelect: (file) async {
+                  final pickedFile =
                       file is List && file.isNotEmpty ? file.first : file;
+
+                  if (pickedFile == null) return;
+
+                  controller.image.value = pickedFile;
+
+                  await controller.uploadImageFile(
+                    pickedFile.path,
+                    onFailed: (message) {
+                      BottomSheetHelper.showError(message);
+                      controller.uploadedPhotoUrl = null;
+                    },
+                    onSuccess: (url) {
+                      controller.uploadedPhotoUrl = url;
+                    },
+                  );
                 },
               ),
               Obx(() => controller.image.value == null
@@ -50,7 +65,6 @@ class AddMenuPage extends GetView<AddMenuController> {
                         fit: BoxFit.cover,
                       ),
                     )),
-              const SizedBox(height: 16),
               AppInput(
                 controller: controller.nameController,
                 hintText: AppLocalizations.menuName(),
@@ -103,11 +117,22 @@ class AddMenuPage extends GetView<AddMenuController> {
                   textColor: Colors.white,
                   onPressed: () => controller.submit(
                     onFailed: (message) {
+                      debugPrint("❌ FAILED: $message");
                       BottomSheetHelper.showError(message);
                     },
-                    onSuccess: (data) {
+                    onSuccess: (data) async {
+                      debugPrint("✅ SUCCESS");
+                      debugPrint(
+                          "🌀 State Before Reset: ${controller.submitState.value}");
+                      controller.submitState.value =
+                          const ResultState.initial();
+                      debugPrint(
+                          "🔄 State After Reset: ${controller.submitState.value}");
                       AlertDialogHelper.showSuccess(
                           AppLocalizations.createMenuSuccessMessage());
+                      await Future.delayed(const Duration(
+                          milliseconds: 300)); // kasih waktu proses selesai
+                      Get.back(result: true);
                     },
                   ),
                 );

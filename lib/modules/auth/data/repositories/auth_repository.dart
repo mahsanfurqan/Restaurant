@@ -60,33 +60,6 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure, AuthValidateModel>> validateAuth() async {
-    try {
-      final accessToken = await _localDataSource.getAccessToken();
-      if (accessToken == null) {
-        await _localDataSource.clearSession();
-        return const Left(AuthFailure());
-      }
-
-      if (_tokenManager.isTokenExpired(accessToken)) {
-        await _localDataSource.clearSession();
-        return const Left(AuthFailure());
-      }
-
-      final authData = await _remoteDataSource.validateAuth();
-      if (authData.data == null) {
-        await _localDataSource.clearSession();
-        return const Left(AuthFailure());
-      }
-
-      await _localDataSource.setAuthSession(authData.data!);
-      return Right(authData.data!);
-    } catch (_) {
-      await _localDataSource.clearSession();
-      return const Left(AuthFailure());
-    }
-  }
-
   Future<Either<Failure, AuthValidateModel>> quickAuthCheck() async {
     try {
       final authSession = await _localDataSource.getAuthSession();
@@ -118,19 +91,26 @@ class AuthRepository {
       if (accessToken == null) {
         return const Left(AuthFailure());
       }
+
       final tokenData = _tokenManager.decodeToken(accessToken);
+
       if (tokenData == null) {
         return const Left(AuthFailure());
       }
+
       final authModel = AuthValidateModel(
         id: tokenData['id'] ?? 0,
         username: tokenData['username'] ?? '',
         hasGroups: [],
         hasPermissions: [],
+        restaurantId: tokenData['restaurant_id'],
       );
+
+      print('✅ authModel: $authModel');
+
       await _localDataSource.setAuthSession(authModel);
       return Right(authModel);
-    } catch (_) {
+    } catch (e) {
       return const Left(AuthFailure());
     }
   }
@@ -165,6 +145,34 @@ class AuthRepository {
       return Right(result);
     } on DioException catch (e) {
       return Left(ServerFailure(e.errorResponse));
+    }
+  }
+
+  Future<Either<Failure, AuthValidateModel>> getUserFromToken() async {
+    try {
+      final accessToken = await _localDataSource.getAccessToken();
+      if (accessToken == null) {
+        await _localDataSource.clearSession();
+        return const Left(AuthFailure());
+      }
+
+      if (_tokenManager.isTokenExpired(accessToken)) {
+        await _localDataSource.clearSession();
+        return const Left(AuthFailure());
+      }
+
+      final result = await _remoteDataSource.getUserFromToken();
+      final data = result.data;
+      if (data == null) {
+        await _localDataSource.clearSession();
+        return const Left(AuthFailure());
+      }
+
+      await _localDataSource.setAuthSession(data);
+      return Right(data);
+    } catch (_) {
+      await _localDataSource.clearSession();
+      return const Left(AuthFailure());
     }
   }
 }

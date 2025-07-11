@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
-import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 
 class ViewMenuController extends GetxController {
   final MenuRepository _menuRepository;
@@ -19,21 +18,20 @@ class ViewMenuController extends GetxController {
 
   Future<void> fetchMenus() async {
     menuState.value = const ResultState.loading();
+
     final result = await _menuRepository.fetchMenus();
+
     result.fold(
-      (failure) => menuState.value = ResultState.failed(
-          AppUtils.getErrorMessage(failure.error?.errors) ??
-              'Failed to load menu data'),
-      (response) => menuState.value = ResultState.success(response.data ?? []),
+      (failure) {
+        menuState.value = ResultState.failed('Gagal memuat menu');
+      },
+      (response) {
+        menuState.value = ResultState.success(response.data ?? []);
+      },
     );
   }
 
   Future<void> refreshMenu() async {
     await fetchMenus();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 }

@@ -72,8 +72,9 @@ class AppBinding extends Bindings {
     Get.lazyPut<AuthRemoteDataSource>(() => AuthRemoteDataSource(Get.find()));
     Get.lazyPut<AuthLocalDataSource>(() => AuthLocalDataSource(Get.find()));
     Get.lazyPut<UserRemoteDataSource>(() => UserRemoteDataSource(Get.find()));
+    Get.lazyPut<MenuRemoteDataSource>(
+        () => MenuRemoteDataSource(Get.find(), Get.find()));
     Get.lazyPut<NoteRemoteDataSource>(() => NoteRemoteDataSource(Get.find()));
-    Get.lazyPut<MenuRemoteDataSource>(() => MenuRemoteDataSource(Get.find()));
     Get.lazyPut<NoteLocalDataSource>(
         () => NoteLocalDataSource(Get.find(), Get.find()));
     Get.lazyPut<SocketRemoteDataSource>(

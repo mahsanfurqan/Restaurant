@@ -17,8 +17,8 @@ class AuthRemoteDataSource {
     return await _authService.login(payload);
   }
 
-  Future<BaseResponse<AuthValidateModel>> validateAuth() =>
-      _authService.validateAuth();
+  Future<BaseResponse<AuthValidateModel>> getUserFromToken() =>
+      _authService.getUserFromToken();
 
   Future<BaseResponse<void>> logout(LogoutDto payload) =>
       _authService.logout(payload);

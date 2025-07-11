@@ -11,9 +11,10 @@ class MenuModel with _$MenuModel {
     required String createdAt,
     required String name,
     required String description,
-    required String price,
+    required int price,
     required bool isAvailable,
-    required CategoryModel categories,
+    @JsonKey(name: 'category') required CategoryModel category,
+    @JsonKey(defaultValue: '') required String photoUrl,
   }) = _MenuModel;
 
   factory MenuModel.fromJson(Map<String, dynamic> json) =>
