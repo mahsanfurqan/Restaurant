@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _checkAuth() async {
-    await Future.delayed(const Duration(seconds: 1)); // Simulasi loading
+    await Future.delayed(const Duration(seconds: 1));
     final authCtrl = Get.find<AuthController>();
     final state = authCtrl.authState.value;
     if (state is ResultSuccess<AuthValidateModel>) {

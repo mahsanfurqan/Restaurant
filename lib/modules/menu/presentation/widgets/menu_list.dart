@@ -70,7 +70,7 @@ class MenuListItem extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               // Kategori
-              if (menu.category?.name != null)
+              if (menu.category.name != null)
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

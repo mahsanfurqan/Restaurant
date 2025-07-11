@@ -12,7 +12,6 @@ class MainPage extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
-    // Inject ViewMenuController manually since ViewMenuPage is used directly
     Get.lazyPut<ViewMenuController>(
         () => ViewMenuController(Get.find<MenuRepository>()));
     return Scaffold(

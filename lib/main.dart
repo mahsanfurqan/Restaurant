@@ -50,7 +50,6 @@ class App extends StatelessWidget {
           }
         });
 
-        // Listen to auth state changes
         ever(authState, (value) {
           print('DEBUG: App - Auth state changed: ${value.runtimeType}');
           if (value is ResultSuccess<AuthValidateModel>) {
@@ -60,7 +59,6 @@ class App extends StatelessWidget {
             print('DEBUG: App - User not logged in, going to login');
             Get.offNamed(AppRoutes.login);
           }
-          // Don't redirect if still loading
         });
       },
       builder: (_) {

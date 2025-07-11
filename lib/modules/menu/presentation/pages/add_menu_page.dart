@@ -117,21 +117,14 @@ class AddMenuPage extends GetView<AddMenuController> {
                   textColor: Colors.white,
                   onPressed: () => controller.submit(
                     onFailed: (message) {
-                      debugPrint("❌ FAILED: $message");
                       BottomSheetHelper.showError(message);
                     },
                     onSuccess: (data) async {
-                      debugPrint("✅ SUCCESS");
-                      debugPrint(
-                          "🌀 State Before Reset: ${controller.submitState.value}");
                       controller.submitState.value =
                           const ResultState.initial();
-                      debugPrint(
-                          "🔄 State After Reset: ${controller.submitState.value}");
                       AlertDialogHelper.showSuccess(
                           AppLocalizations.createMenuSuccessMessage());
-                      await Future.delayed(const Duration(
-                          milliseconds: 300)); // kasih waktu proses selesai
+                      await Future.delayed(const Duration(milliseconds: 300));
                       Get.back(result: true);
                     },
                   ),

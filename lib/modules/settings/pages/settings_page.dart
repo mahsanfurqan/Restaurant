@@ -10,8 +10,6 @@ import '../controllers/settings_controller.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/controllers/theme_controller.dart';
 import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
 import '../widgets/restaurant_info_widget.dart';
-import 'package:flutter_boilerplate/shared/widgets/app_input.dart';
-import 'package:flutter_boilerplate/shared/widgets/app_button.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({Key? key}) : super(key: key);
@@ -99,12 +97,11 @@ class SettingsPage extends GetView<SettingsController> {
                               icon: const Icon(Icons.edit,
                                   color: AppColors.green),
                               onPressed: () async {
-                                final email = controller.userEmail.value;
-                                final username = controller.userName.value;
-                                final emailController =
-                                    TextEditingController(text: email);
+                                final emailController = TextEditingController(
+                                    text: controller.userEmail.value);
                                 final userNameController =
-                                    TextEditingController(text: username);
+                                    TextEditingController(
+                                        text: controller.userName.value);
                                 final result = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -112,26 +109,28 @@ class SettingsPage extends GetView<SettingsController> {
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        AppInput(
+                                        TextField(
                                           controller: emailController,
-                                          hintText: AppLocalizations
-                                              .emailPlaceholder(),
+                                          decoration: InputDecoration(
+                                              labelText:
+                                                  AppLocalizations.email()),
                                         ),
                                         const SizedBox(height: 8),
-                                        AppInput(
+                                        TextField(
                                           controller: userNameController,
-                                          hintText: AppLocalizations
-                                              .registerUsernamePlaceholder(),
+                                          decoration: InputDecoration(
+                                              labelText:
+                                                  AppLocalizations.username()),
                                         ),
                                       ],
                                     ),
                                     actions: [
-                                      AppButton.text(
+                                      TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(false),
-                                        text: AppLocalizations.cancel(),
+                                        child: Text(AppLocalizations.cancel()),
                                       ),
-                                      AppButton(
+                                      ElevatedButton(
                                         onPressed: () async {
                                           final authState = controller
                                               .authCtrl.authState.value;
@@ -149,7 +148,7 @@ class SettingsPage extends GetView<SettingsController> {
                                             Navigator.of(context).pop(success);
                                           }
                                         },
-                                        text: AppLocalizations.save(),
+                                        child: Text(AppLocalizations.save()),
                                       ),
                                     ],
                                   ),

@@ -25,5 +25,4 @@ final List<DummyUser> dummyUsers = [
     username: 'siti',
     password: 'siti456',
   ),
-  // Tambahkan data dummy lain jika perlu
 ];
