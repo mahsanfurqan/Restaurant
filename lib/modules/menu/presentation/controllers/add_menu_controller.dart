@@ -8,27 +8,39 @@ import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_controller.dart';
 
 class AddMenuController extends GetxController {
-  final MenuRepository _menuRepository;
+  final MenuRepository _repository;
 
-  AddMenuController(this._menuRepository);
+  AddMenuController(this._repository);
 
-  final formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final categoryController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final priceController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _categoryController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController();
 
-  var image = Rxn<dynamic>();
-  var selectedCategory = Rxn<CategoryModel>();
-  var categoryList = <CategoryModel>[].obs;
+  final _image = Rxn<dynamic>();
+  final _selectedCategory = Rxn<CategoryModel>();
+  final _categoryList = <CategoryModel>[].obs;
 
-  final submitState = ResultState<bool>.initial().obs;
-  String? uploadedPhotoUrl;
+  final _submitState = Rx<ResultState<bool>>(const ResultState.initial());
+  String? _uploadedPhotoUrl;
+
+  // Getters
+  GlobalKey<FormState> get formKey => _formKey;
+  TextEditingController get nameController => _nameController;
+  TextEditingController get categoryController => _categoryController;
+  TextEditingController get descriptionController => _descriptionController;
+  TextEditingController get priceController => _priceController;
+  Rxn<dynamic> get image => _image;
+  Rxn<CategoryModel> get selectedCategory => _selectedCategory;
+  List<CategoryModel> get categoryList => _categoryList;
+  ResultState<bool> get submitState => _submitState.value;
+  String? get uploadedPhotoUrl => _uploadedPhotoUrl;
 
   @override
   void onInit() {
     super.onInit();
-    fetchCategories();
+    _fetchCategories();
   }
 
   Future<void> uploadImageFile(
@@ -36,7 +48,7 @@ class AddMenuController extends GetxController {
     Function(String message)? onFailed,
     Function(String imageUrl)? onSuccess,
   }) async {
-    final result = await _menuRepository.uploadFile(
+    final result = await _repository.uploadFile(
       filePath: filePath,
       folder: 'menu',
     );
@@ -44,37 +56,37 @@ class AddMenuController extends GetxController {
     result.fold(
       (failure) {
         final message = AppUtils.getErrorMessage(failure.error?.errors);
-        uploadedPhotoUrl = null;
-        onFailed?.call(message ?? 'Upload gagal');
+        _uploadedPhotoUrl = null;
+        onFailed?.call(message ?? '');
       },
       (data) {
-        uploadedPhotoUrl = data.url;
-        onSuccess?.call(data.url);
+        _uploadedPhotoUrl = data.data?.url ?? '';
+        onSuccess?.call(data.data?.url ?? '');
       },
     );
   }
 
-  Future<void> fetchCategories() async {
-    final result = await _menuRepository.fetchCategories();
+  Future<void> _fetchCategories() async {
+    final result = await _repository.fetchCategories();
     result.fold(
-      (failure) => categoryList.assignAll([]),
-      (data) => categoryList.assignAll(data),
+      (failure) => _categoryList.assignAll([]),
+      (data) => _categoryList.assignAll(data),
     );
   }
 
   bool get isFormValid =>
-      image.value != null &&
-      nameController.text.isNotEmpty &&
-      selectedCategory.value != null &&
-      priceController.text.isNotEmpty &&
-      double.tryParse(priceController.text) != null;
+      _image.value != null &&
+      _nameController.text.isNotEmpty &&
+      _selectedCategory.value != null &&
+      _priceController.text.isNotEmpty &&
+      double.tryParse(_priceController.text) != null;
 
   Future<void> submit({
     Function(String message)? onFailed,
     Function(bool success)? onSuccess,
   }) async {
-    if (formKey.currentState?.validate() == false) return;
-    submitState.value = const ResultState.loading();
+    if (_formKey.currentState?.validate() == false) return;
+    _submitState.value = const ResultState.loading();
 
     final restaurantId = Get.find<AuthController>().authState.value.maybeWhen(
           success: (data) => data.restaurantId,
@@ -82,42 +94,40 @@ class AddMenuController extends GetxController {
         );
 
     if (restaurantId == null) {
-      submitState.value = const ResultState.failed("User tidak valid.");
+      _submitState.value = const ResultState.failed("User tidak valid.");
       onFailed?.call("User tidak valid.");
       return;
     }
 
     final request = MenuRequestModel(
-      name: nameController.text,
-      description: descriptionController.text,
-      photoUrl: uploadedPhotoUrl ?? '',
+      name: _nameController.text,
+      description: _descriptionController.text,
+      photoUrl: _uploadedPhotoUrl ?? '',
       price: int.tryParse(
-              priceController.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
+              _priceController.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
           0,
       isAvailable: true,
-      categoryId: selectedCategory.value?.id ?? 0,
+      categoryId: _selectedCategory.value?.id ?? 0,
       restaurantId: restaurantId,
     );
 
-    final result = await _menuRepository.createMenu(request);
+    final result = await _repository.createMenu(request);
     result.fold((failure) {
       final message = AppUtils.getErrorMessage(failure.error?.errors);
-      submitState.value = ResultState.failed(message);
+      _submitState.value = ResultState.failed(message);
       onFailed?.call(message ?? '');
     }, (response) {
-      submitState.value = const ResultState.success(true);
+      _submitState.value = const ResultState.success(true);
       onSuccess?.call(true);
-
-      Get.back();
     });
   }
 
   @override
   void onClose() {
-    nameController.dispose();
-    categoryController.dispose();
-    descriptionController.dispose();
-    priceController.dispose();
+    _nameController.dispose();
+    _categoryController.dispose();
+    _descriptionController.dispose();
+    _priceController.dispose();
     super.onClose();
   }
 }

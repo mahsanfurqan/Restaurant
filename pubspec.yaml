@@ -61,6 +61,7 @@ dependencies:
     pull_to_refresh_new: ^2.0.5
     retrofit: ^4.4.1
     sentry_flutter: ^8.13.2
+    shared_preferences: ^2.2.2
     skeletonizer: ^1.4.2
     sqflite: ^2.4.1
     web_socket_channel: ^3.0.2

@@ -2,120 +2,161 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/controllers/theme_controller.dart';
 import 'package:flutter_boilerplate/modules/auth/presentation/controllers/auth_controller.dart';
-import 'package:flutter_boilerplate/modules/auth/data/repositories/auth_repository.dart';
-import 'package:flutter_boilerplate/modules/user/data/data_sources/remote/user_remote_data_source.dart';
-import 'package:flutter_boilerplate/modules/user/data/repositories/user_repository.dart';
-import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
+import 'package:flutter_boilerplate/modules/settings/data/repositories/settings_repository.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/restaurant_model.dart';
+import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
+import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 
 class SettingsController extends GetxController {
-  var userFullName = ''.obs;
-  var userName = ''.obs;
-  var userEmail = ''.obs;
-  final isDarkTheme = false.obs;
-  var currentLanguage = 'id'.obs;
-  var isLoggedIn = true.obs;
+  final ThemeController _themeController;
+  final AuthController _authController;
+  final SettingsRepository _settingsRepository;
 
-  final ThemeController themeCtrl = Get.find<ThemeController>();
-  final AuthController authCtrl = Get.find<AuthController>();
-  final AuthRepository authRepository = Get.find<AuthRepository>();
-  final UserRemoteDataSource userRemoteDataSource =
-      Get.find<UserRemoteDataSource>();
-  final UserRepository userRepository = Get.find<UserRepository>();
-  final MenuRepository menuRepository = Get.find<MenuRepository>();
-  var restaurant = Rxn<RestaurantModel>();
-  final RxnString restaurantError = RxnString();
-  final RxBool isRestaurantLoading = false.obs;
+  SettingsController(
+    this._themeController,
+    this._authController,
+    this._settingsRepository,
+  );
+
+  // State for user profile
+  final Rx<ResultState<Map<String, String>>> userProfileState =
+      const ResultState<Map<String, String>>.initial().obs;
+  // State for restaurant
+  final Rx<ResultState<RestaurantModel>> restaurantState =
+      const ResultState<RestaurantModel>.initial().obs;
+  // State for update user
+  final Rx<ResultState<bool>> updateUserState =
+      const ResultState<bool>.initial().obs;
+  // State for update restaurant
+  final Rx<ResultState<bool>> updateRestaurantState =
+      const ResultState<bool>.initial().obs;
+
+  final RxBool _isDarkTheme = false.obs;
+  final RxString _currentLanguage = 'id'.obs;
+  final RxBool _isLoggedIn = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    isDarkTheme.value = themeCtrl.currentThemeMode.value == ThemeMode.dark;
+    _isDarkTheme.value =
+        _themeController.currentThemeMode.value == ThemeMode.dark;
     fetchUserProfile();
     fetchRestaurant();
   }
 
-  Future<void> fetchUserProfile() async {
+  void fetchUserProfile() async {
+    userProfileState.value = const ResultState.loading();
     try {
-      final authState = authCtrl.authState.value;
+      final authState = _authController.authState.value;
       final userId = authState.maybeWhen(
         success: (data) => data.id,
         orElse: () => null,
       );
       if (userId != null) {
-        final user = await userRepository.getUserById(userId);
-        userEmail.value = user?.email ?? '-';
-        userName.value = user?.username ?? '-';
-      } else {
-        userEmail.value = '-';
-        userName.value = '-';
-      }
-    } catch (e) {
-      userEmail.value = '-';
-      userName.value = '-';
-    }
-  }
-
-  Future<void> fetchRestaurant() async {
-    isRestaurantLoading.value = true;
-    restaurantError.value = null;
-    try {
-      final authState = authCtrl.authState.value;
-      final restaurantId = authState.maybeWhen(
-        success: (data) => data.restaurantId,
-        orElse: () => null,
-      );
-      if (restaurantId != null) {
-        final result = await menuRepository.getRestaurant(restaurantId);
+        final result = await _settingsRepository.getUserById(userId);
         result.fold(
-          (failure) => restaurant.value = null,
-          (data) => restaurant.value = data.data,
+          (failure) => userProfileState.value = ResultState.failed(
+              AppUtils.getErrorMessage(failure.error?.errors)),
+          (user) => userProfileState.value = ResultState.success({
+            'email': user?.email ?? '-',
+            'username': user?.username ?? '-',
+          }),
         );
+      } else {
+        userProfileState.value = ResultState.success({
+          'email': '-',
+          'username': '-',
+        });
       }
     } catch (e) {
-      restaurantError.value = e.toString();
-    } finally {
-      isRestaurantLoading.value = false;
+      userProfileState.value = ResultState.failed(e.toString());
     }
   }
 
-  Future<bool> updateRestaurant(Map<String, dynamic> body) async {
-    isRestaurantLoading.value = true;
-    restaurantError.value = null;
+  void fetchRestaurant() async {
+    restaurantState.value = const ResultState.loading();
     try {
-      final authState = authCtrl.authState.value;
+      final authState = _authController.authState.value;
       final restaurantId = authState.maybeWhen(
         success: (data) => data.restaurantId,
         orElse: () => null,
       );
       if (restaurantId != null) {
-        final result =
-            await menuRepository.updateRestaurant(restaurantId, body);
-        return result.isRight();
+        final result = await _settingsRepository.getRestaurant(restaurantId);
+        result.fold(
+          (failure) => restaurantState.value = ResultState.failed(
+              AppUtils.getErrorMessage(failure.error?.errors)),
+          (data) {
+            if (data != null) {
+              restaurantState.value = ResultState.success(data);
+            } else {
+              restaurantState.value = ResultState.failed('No restaurant data');
+            }
+          },
+        );
+      } else {
+        restaurantState.value = ResultState.failed('No restaurant ID');
       }
-      return false;
     } catch (e) {
-      restaurantError.value = e.toString();
-      return false;
-    } finally {
-      isRestaurantLoading.value = false;
+      restaurantState.value = ResultState.failed(e.toString());
     }
   }
 
-  Future<bool> updateUserProfile(int id, Map<String, dynamic> body) async {
-    final updatedUser = await userRepository.updateUser(id, body);
-    if (updatedUser != null) {
-      userFullName.value = updatedUser.name ?? '-';
-      userName.value = updatedUser.username ?? '-';
-      return true;
+  Future<void> updateUserProfile(int id, Map<String, dynamic> body) async {
+    updateUserState.value = const ResultState.loading();
+    final result = await _settingsRepository.updateUserProfile(id, body);
+    result.fold(
+      (failure) => updateUserState.value =
+          ResultState.failed(AppUtils.getErrorMessage(failure.error?.errors)),
+      (updatedUser) {
+        if (updatedUser != null) {
+          updateUserState.value = const ResultState.success(true);
+          fetchUserProfile();
+        } else {
+          updateUserState.value = ResultState.failed('Update failed');
+        }
+      },
+    );
+  }
+
+  Future<void> updateRestaurant(Map<String, dynamic> body) async {
+    updateRestaurantState.value = const ResultState.loading();
+    final authState = _authController.authState.value;
+    final restaurantId = authState.maybeWhen(
+      success: (data) => data.restaurantId,
+      orElse: () => null,
+    );
+    if (restaurantId != null) {
+      final result =
+          await _settingsRepository.updateRestaurant(restaurantId, body);
+      result.fold(
+        (failure) => updateRestaurantState.value =
+            ResultState.failed(AppUtils.getErrorMessage(failure.error?.errors)),
+        (data) {
+          updateRestaurantState.value = const ResultState.success(true);
+          fetchRestaurant();
+        },
+      );
+    } else {
+      updateRestaurantState.value = ResultState.failed('No restaurant ID');
     }
-    return false;
   }
 
   Future<void> logout({required Function() onSuccess}) async {
-    try {
-      await authRepository.logout();
-      onSuccess();
-    } catch (e) {}
+    final result = await _settingsRepository.logout();
+    result.fold(
+      (failure) {
+        // Handle logout failure
+      },
+      (success) {
+        onSuccess();
+      },
+    );
   }
+
+  // Getters for public access
+  RxBool get isDarkTheme => _isDarkTheme;
+  RxString get currentLanguage => _currentLanguage;
+  RxBool get isLoggedIn => _isLoggedIn;
+  AuthController get authController => _authController;
 }

@@ -89,11 +89,7 @@ class _MenuInfoRow extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            menu.name == 'menuNasiGoreng'
-                ? AppLocalizations.menuNasiGoreng()
-                : menu.name == 'menuMatcha'
-                    ? AppLocalizations.menuMatcha()
-                    : menu.name,
+            menu.name,
             style: AppFonts.lgBold,
           ),
         ),
@@ -105,11 +101,7 @@ class _MenuInfoRow extends StatelessWidget {
             border: Border.all(color: AppColors.green, width: 1.5),
           ),
           child: Text(
-            (menu.category.name ?? '') == 'categoryFood'
-                ? AppLocalizations.categoryFood()
-                : (menu.category.name ?? '') == 'categoryDrink'
-                    ? AppLocalizations.categoryDrink()
-                    : (menu.category.name ?? ''),
+            menu.category.name ?? '',
             style: AppFonts.smBold.copyWith(color: AppColors.green),
           ),
         ),
@@ -159,11 +151,7 @@ class _MenuDescription extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          menu.description == 'descNasiGoreng'
-              ? AppLocalizations.descNasiGoreng()
-              : menu.description == 'descMatcha'
-                  ? AppLocalizations.descMatcha()
-                  : (menu.description.isNotEmpty ? menu.description : '-'),
+          menu.description.isNotEmpty ? menu.description : '-',
           style: AppFonts.mdRegular,
         ),
       ],
@@ -216,7 +204,8 @@ class _MenuActionRow extends StatelessWidget {
                   AppLocalizations.deleteMenuSuccess());
               if (onEditSuccess != null) onEditSuccess!();
             } else {
-              await AlertDialogHelper.showError('Gagal menghapus menu');
+              await AlertDialogHelper.showError(
+                  AppLocalizations.editMenuFailed());
             }
           }
         },
@@ -250,14 +239,9 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
   @override
   void initState() {
     super.initState();
-    nameCtrl = TextEditingController(
-        text: widget.menu.name == 'menuNasiGoreng' ? '' : widget.menu.name);
+    nameCtrl = TextEditingController(text: widget.menu.name);
     priceCtrl = TextEditingController(text: widget.menu.price.toString());
-    descCtrl = TextEditingController(
-        text: widget.menu.description == 'descNasiGoreng' ||
-                widget.menu.description == 'descMatcha'
-            ? ''
-            : widget.menu.description);
+    descCtrl = TextEditingController(text: widget.menu.description);
     kategori = widget.menu.category.name;
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/core/routes/app_pages.dart';
+import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_button.dart';
 import 'package:flutter_boilerplate/shared/widgets/app_refresher.dart';
 import 'package:get/get.dart';
@@ -19,62 +20,194 @@ class ViewMenuPage extends GetView<ViewMenuController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.lihatMenuTitle()),
+        actions: [
+          Obx(() => controller.isOfflineMode
+              ? Container(
+                  margin: const EdgeInsets.only(right: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.orange, width: 1),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.wifi_off,
+                        size: 16,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(AppLocalizations.offline(),
+                          style: AppFonts.smRegular.copyWith()),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink()),
+        ],
       ),
       body: SafeArea(
         child: Obx(() {
           localizationCtrl.currentLocale.value;
-          final state = controller.menuState.value;
+          final state = controller.menuState;
 
           return state.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             success: (menus) => menus.isEmpty
-                ? Center(child: Text(AppLocalizations.menuNotFound()))
-                : AppRefresher(
-                    onRefresh: controller.refreshMenu,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(16),
-                      itemCount: menus.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final menu = menus[index];
-                        return MenuListItem(
-                          menu: menu,
-                          onTap: () {
-                            Get.bottomSheet(
-                              ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxHeight: Get.height * 0.8,
-                                ),
-                                child: DetailMenu(
-                                  menu: menu,
-                                  onEditSuccess: () => controller.fetchMenus(),
-                                ),
-                              ),
-                              isScrollControlled: true,
-                              backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(24)),
-                              ),
-                            );
-                          },
-                        );
-                      },
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.restaurant_menu,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          AppLocalizations.menuNotFound(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        if (controller.isOfflineMode) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            'Data dari cache',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.orange,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
+                  )
+                : Column(
+                    children: [
+                      // Offline banner
+                      if (controller.isOfflineMode)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          color: Colors.orange.withOpacity(0.1),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.wifi_off,
+                                size: 16,
+                                color: Colors.orange,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Menampilkan data dari cache (mode offline)',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: controller.refreshMenu,
+                                child: Text(
+                                  'Refresh',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      // Menu list
+                      Expanded(
+                        child: AppRefresher(
+                          onRefresh: controller.refreshMenu,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(16),
+                            itemCount: menus.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final menu = menus[index];
+                              return MenuListItem(
+                                menu: menu,
+                                onTap: () {
+                                  Get.bottomSheet(
+                                    ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: Get.height * 0.8,
+                                      ),
+                                      child: DetailMenu(
+                                        menu: menu,
+                                        onEditSuccess: () =>
+                                            controller.fetchMenus(),
+                                      ),
+                                    ),
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(24)),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
             failed: (message) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(message ?? AppLocalizations.menuNotFound()),
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.grey[400],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    message ?? AppLocalizations.menuNotFound(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                    ),
+                  ),
                   const SizedBox(height: 16),
                   AppButton(
                     onPressed: controller.refreshMenu,
                     text: AppLocalizations.retry(),
                     backgroundColor: AppColors.green,
                   ),
+                  if (controller.hasCachedData) ...[
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () {
+                        controller.loadCachedMenus();
+                      },
+                      child: Text(
+                        'Tampilkan data cache',
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

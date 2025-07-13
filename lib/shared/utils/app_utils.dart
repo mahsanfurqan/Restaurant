@@ -5,6 +5,7 @@ import 'package:flutter_boilerplate/firebase_options.dart';
 import 'package:flutter_boilerplate/shared/responses/error_detail_response.dart';
 import 'package:flutter_boilerplate/shared/utils/app_constants.dart';
 import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
+import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
@@ -73,4 +74,9 @@ extension CurrencyFormat on int {
   String get toCurrencyFormat {
     return 'Rp ${toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}';
   }
+}
+
+extension ResultStateX<T> on ResultState<T> {
+  T? get successOrNull =>
+      maybeWhen(success: (data) => data, orElse: () => null);
 }

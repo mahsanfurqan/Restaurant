@@ -10,6 +10,7 @@ import '../controllers/settings_controller.dart';
 import 'package:flutter_boilerplate/modules/theme/presentation/controllers/theme_controller.dart';
 import 'package:flutter_boilerplate/shared/helpers/alert_dialog_helper.dart';
 import '../widgets/restaurant_info_widget.dart';
+import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({Key? key}) : super(key: key);
@@ -19,19 +20,13 @@ class SettingsPage extends GetView<SettingsController> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchUserProfile();
     });
-
-    final theme = context.theme;
     final localizationCtrl = Get.find<LocalizationController>();
     final themeCtrl = Get.find<ThemeController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
           AppLocalizations.settingsTitle(),
-          style: AppFonts.lgBold.copyWith(color: Colors.black),
         ),
-        foregroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
       ),
       bottomNavigationBar: CustomNavbar(
         selectedIndex: 1,
@@ -71,25 +66,55 @@ class SettingsPage extends GetView<SettingsController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(AppLocalizations.email(),
-                                      style: AppFonts.smRegular
-                                          .copyWith(color: Colors.grey[700])),
-                                  Obx(() => Text(
-                                      controller.userEmail.value.isEmpty
-                                          ? '-'
-                                          : controller.userEmail.value,
-                                      style: AppFonts.mdSemiBold
-                                          .copyWith(color: AppColors.green))),
+                                      style: AppFonts.smRegular.copyWith()),
+                                  Obx(() {
+                                    final state =
+                                        controller.userProfileState.value;
+                                    return state.when(
+                                      initial: () => const SizedBox.shrink(),
+                                      loading: () => const SizedBox(
+                                          height: 16,
+                                          width: 16,
+                                          child: CircularProgressIndicator(
+                                              strokeWidth: 2)),
+                                      failed: (msg) => Text(msg ?? '-',
+                                          style: AppFonts.mdSemiBold
+                                              .copyWith(color: Colors.red)),
+                                      success: (data) => Text(
+                                        data['email']?.isEmpty == true
+                                            ? '-'
+                                            : data['email']!,
+                                        style: AppFonts.mdSemiBold
+                                            .copyWith(color: AppColors.green),
+                                      ),
+                                    );
+                                  }),
                                   const SizedBox(height: 8),
                                   Text(AppLocalizations.username(),
-                                      style: AppFonts.smRegular
-                                          .copyWith(color: Colors.grey[700])),
-                                  Obx(() => Text(
-                                      controller.userName.value.isEmpty
-                                          ? '-'
-                                          : controller.userName.value,
-                                      style: AppFonts.smRegular.copyWith(
-                                          color: AppColors.green
-                                              .withOpacity(0.7)))),
+                                      style: AppFonts.smRegular.copyWith()),
+                                  Obx(() {
+                                    final state =
+                                        controller.userProfileState.value;
+                                    return state.when(
+                                      initial: () => const SizedBox.shrink(),
+                                      loading: () => const SizedBox(
+                                          height: 16,
+                                          width: 16,
+                                          child: CircularProgressIndicator(
+                                              strokeWidth: 2)),
+                                      failed: (msg) => Text(msg ?? '-',
+                                          style: AppFonts.smRegular
+                                              .copyWith(color: Colors.red)),
+                                      success: (data) => Text(
+                                        data['username']?.isEmpty == true
+                                            ? '-'
+                                            : data['username']!,
+                                        style: AppFonts.smRegular.copyWith(
+                                            color: AppColors.green
+                                                .withOpacity(0.7)),
+                                      ),
+                                    );
+                                  }),
                                 ],
                               ),
                             ),
@@ -97,11 +122,18 @@ class SettingsPage extends GetView<SettingsController> {
                               icon: const Icon(Icons.edit,
                                   color: AppColors.green),
                               onPressed: () async {
-                                final emailController = TextEditingController(
-                                    text: controller.userEmail.value);
+                                final userState =
+                                    controller.userProfileState.value;
+                                String email = '';
+                                String username = '';
+                                userState.whenOrNull(success: (data) {
+                                  email = data['email'] ?? '';
+                                  username = data['username'] ?? '';
+                                });
+                                final emailController =
+                                    TextEditingController(text: email);
                                 final userNameController =
-                                    TextEditingController(
-                                        text: controller.userName.value);
+                                    TextEditingController(text: username);
                                 final result = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -133,19 +165,22 @@ class SettingsPage extends GetView<SettingsController> {
                                       ElevatedButton(
                                         onPressed: () async {
                                           final authState = controller
-                                              .authCtrl.authState.value;
+                                              .authController.authState.value;
                                           final userId = authState.maybeWhen(
                                             success: (data) => data.id,
                                             orElse: () => null,
                                           );
                                           if (userId != null) {
-                                            final success = await controller
+                                            await controller
                                                 .updateUserProfile(userId, {
                                               'email': emailController.text,
                                               'username':
                                                   userNameController.text,
                                             });
-                                            Navigator.of(context).pop(success);
+                                            final state = controller
+                                                .updateUserState.value;
+                                            Navigator.of(context).pop(
+                                                state.successOrNull == true);
                                           }
                                         },
                                         child: Text(AppLocalizations.save()),
@@ -217,7 +252,6 @@ class SettingsPage extends GetView<SettingsController> {
                       );
                       await controller.logout(
                         onSuccess: () {
-                          Get.back();
                           Get.offAllNamed(AppRoutes.login);
                           AlertDialogHelper.showSuccess(
                             AppLocalizations.logoutSuccess(),

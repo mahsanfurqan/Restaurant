@@ -14,11 +14,18 @@ import 'package:flutter_boilerplate/modules/connectivity/presentation/controller
 import 'package:flutter_boilerplate/modules/localization/data/data_sources/local/localization_local_data_source.dart';
 import 'package:flutter_boilerplate/modules/localization/data/repositories/localization_repository.dart';
 import 'package:flutter_boilerplate/modules/localization/presentation/controllers/localization_controller.dart';
+import 'package:flutter_boilerplate/modules/menu/data/data_sources/local/menu_local_data_source.dart';
+import 'package:flutter_boilerplate/modules/menu/data/data_sources/remote/menu_remote_data_source.dart';
+import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/controllers/add_menu_controller.dart';
+import 'package:flutter_boilerplate/modules/menu/presentation/controllers/view_menu_controller.dart';
 import 'package:flutter_boilerplate/modules/note/data/data_sources/local/db/note_dao.dart';
 import 'package:flutter_boilerplate/modules/note/data/data_sources/local/note_local_data_source.dart';
 import 'package:flutter_boilerplate/modules/note/data/data_sources/remote/note_remote_data_source.dart';
 import 'package:flutter_boilerplate/modules/note/data/data_sources/remote/services/note_service.dart';
 import 'package:flutter_boilerplate/modules/note/data/repositories/note_repository.dart';
+import 'package:flutter_boilerplate/modules/menu/data/data_sources/local/db/menu_dao.dart';
+import 'package:flutter_boilerplate/modules/menu/data/data_sources/local/db/category_dao.dart';
 import 'package:flutter_boilerplate/modules/socket/data/data_sources/remote/socket_remote_data_source.dart';
 import 'package:flutter_boilerplate/modules/socket/data/repository/socket_repository.dart';
 import 'package:flutter_boilerplate/modules/theme/data/data_source/local/theme_local_data_source.dart';
@@ -61,6 +68,8 @@ class AppBinding extends Bindings {
     // Dao's
     Get.lazyPut<UserDao>(() => appDatabase.userDao);
     Get.lazyPut<NoteDao>(() => appDatabase.noteDao);
+    Get.lazyPut<MenuDao>(() => appDatabase.menuDao);
+    Get.lazyPut<CategoryDao>(() => appDatabase.categoryDao);
 
     // Api Services
     Get.lazyPut<AuthService>(() => AuthService(Get.find()));
@@ -74,6 +83,8 @@ class AppBinding extends Bindings {
     Get.lazyPut<UserRemoteDataSource>(() => UserRemoteDataSource(Get.find()));
     Get.lazyPut<MenuRemoteDataSource>(
         () => MenuRemoteDataSource(Get.find(), Get.find()));
+    Get.lazyPut<MenuLocalDataSource>(
+        () => MenuLocalDataSource(Get.find(), Get.find()));
     Get.lazyPut<NoteRemoteDataSource>(() => NoteRemoteDataSource(Get.find()));
     Get.lazyPut<NoteLocalDataSource>(
         () => NoteLocalDataSource(Get.find(), Get.find()));
@@ -87,7 +98,7 @@ class AppBinding extends Bindings {
     Get.put<AuthRepository>(
         AuthRepository(Get.find(), Get.find(), Get.find(), Get.find()));
     Get.put<NoteRepository>(NoteRepository(Get.find(), Get.find()));
-    Get.put<MenuRepository>(MenuRepository(Get.find()));
+    Get.put<MenuRepository>(MenuRepository(Get.find(), Get.find()));
     Get.put<SocketRepository>(SocketRepository(Get.find()));
     Get.put<LocalizationRepository>(LocalizationRepository(Get.find()));
     Get.put<ThemeRepository>(ThemeRepository(Get.find()));

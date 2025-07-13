@@ -4,8 +4,6 @@ import 'package:flutter_boilerplate/modules/auth/data/repositories/auth_reposito
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/modules/auth/data/models/register_request_model.dart';
-import 'package:flutter_boilerplate/core/common/failures.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 
 class AuthController extends GetxController {
@@ -32,7 +30,7 @@ class AuthController extends GetxController {
 
     result.fold(
       (failure) {
-        authState.value = const ResultState.failed("User tidak valid.");
+        authState.value = const ResultState.failed("User tidak valid");
       },
       (data) {
         authState.value = ResultState.success(data);

@@ -30,7 +30,6 @@ class MenuListItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Gambar
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: menu.photoUrl?.isNotEmpty == true
@@ -61,15 +60,12 @@ class MenuListItem extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       menu.price?.toCurrencyFormat ?? '-',
-                      style: AppFonts.smMedium.copyWith(
-                        color: Colors.black87,
-                      ),
+                      style: AppFonts.smMedium.copyWith(),
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              // Kategori
               if (menu.category.name != null)
                 Container(
                   padding:

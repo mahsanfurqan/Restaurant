@@ -15,6 +15,7 @@ class AppImages {
   String get enFlag => 'assets/images/en_flag.png';
   String get nasiGoreng => 'assets/images/nasigoreng.jpg';
   String get matcha => 'assets/images/matcha.jpg';
+  String get load => 'assets/images/load.jpg';
 }
 
 class AppPngIcons {

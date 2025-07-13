@@ -21,7 +21,7 @@ class AppTranslations extends Translations {
         'note': 'Note',
         'createNote': 'Create Note',
         'editNote': 'Edit Note',
-        'username': 'Email',
+        'username': 'Username',
         'password': 'Password',
         'usernamePlaceholder': 'Enter your email',
         'passwordPlaceholder': 'Enter your password',
@@ -172,6 +172,7 @@ class AppTranslations extends Translations {
         'restaurantNotFound': 'Restaurant data not found',
         'editRestaurant': 'Edit Restaurant',
         'restaurantNameRequired': 'Restaurant name is required',
+        'offline': 'Offline',
       },
       'id': {
         'selectFromGallery': 'Pilih dari Galeri',
@@ -191,7 +192,7 @@ class AppTranslations extends Translations {
         'note': 'Catatan',
         'createNote': 'Buat Catatan',
         'editNote': 'Edit Catatan',
-        'username': 'Email',
+        'username': 'Nama Pengguna',
         'password': 'Password',
         'usernamePlaceholder': 'Masukkan email anda',
         'passwordPlaceholder': 'Masukkan password anda',
@@ -341,6 +342,7 @@ class AppTranslations extends Translations {
         'restaurantNotFound': 'Data restoran tidak ditemukan',
         'editRestaurant': 'Edit Restoran',
         'restaurantNameRequired': 'Nama restoran wajib diisi',
+        'offline': 'Terputus'
       },
     };
   }

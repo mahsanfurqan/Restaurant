@@ -41,11 +41,8 @@ class AddMenuPage extends GetView<AddMenuController> {
                     pickedFile.path,
                     onFailed: (message) {
                       BottomSheetHelper.showError(message);
-                      controller.uploadedPhotoUrl = null;
                     },
-                    onSuccess: (url) {
-                      controller.uploadedPhotoUrl = url;
-                    },
+                    onSuccess: (url) {},
                   );
                 },
               ),
@@ -109,7 +106,7 @@ class AddMenuPage extends GetView<AddMenuController> {
               ),
               const SizedBox(height: 24),
               Obx(() {
-                final state = controller.submitState.value;
+                final state = controller.submitState;
                 return AppButton(
                   text: AppLocalizations.save(),
                   isLoading: state is ResultLoading,
@@ -120,8 +117,6 @@ class AddMenuPage extends GetView<AddMenuController> {
                       BottomSheetHelper.showError(message);
                     },
                     onSuccess: (data) async {
-                      controller.submitState.value =
-                          const ResultState.initial();
                       AlertDialogHelper.showSuccess(
                           AppLocalizations.createMenuSuccessMessage());
                       await Future.delayed(const Duration(milliseconds: 300));

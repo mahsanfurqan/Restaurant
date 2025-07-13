@@ -175,4 +175,5 @@ abstract class AppLocalizations {
   static String restaurantNotFound() => 'restaurantNotFound'.tr;
   static String editRestaurant() => 'editRestaurant'.tr;
   static String restaurantNameRequired() => 'restaurantNameRequired'.tr;
+  static String offline() => 'offline'.tr;
 }
