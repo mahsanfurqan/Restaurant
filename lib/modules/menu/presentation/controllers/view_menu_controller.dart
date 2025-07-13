@@ -14,7 +14,6 @@ class ViewMenuController extends GetxController {
   final _isOfflineMode = false.obs;
   final _hasCachedData = false.obs;
 
-  // Getters
   ResultState<List<MenuModel>> get menuState => _menuState.value;
   bool get isOfflineMode => _isOfflineMode.value;
   bool get hasCachedData => _hasCachedData.value;

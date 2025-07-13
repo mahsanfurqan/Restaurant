@@ -39,8 +39,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_boilerplate/modules/menu/data/data_sources/remote/services/menu_service.dart';
-import 'package:flutter_boilerplate/modules/menu/data/data_sources/remote/menu_remote_data_source.dart';
-import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
 
 class AppBinding extends Bindings {
   @override

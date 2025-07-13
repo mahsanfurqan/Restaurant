@@ -28,6 +28,22 @@ class AppAlertDialog extends StatefulWidget {
     this.showCancelBtn = false,
   });
 
+  static void showSuccess(String message, {String? title}) {
+    Get.dialog(AppAlertDialog(
+      type: AppAlertType.success,
+      text: message,
+      title: title,
+    ));
+  }
+
+  static void showError(String message, {String? title}) {
+    Get.dialog(AppAlertDialog(
+      type: AppAlertType.error,
+      text: message,
+      title: title,
+    ));
+  }
+
   @override
   State<AppAlertDialog> createState() => _AppAlertDialogState();
 }

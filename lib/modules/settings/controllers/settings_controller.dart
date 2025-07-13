@@ -6,6 +6,7 @@ import 'package:flutter_boilerplate/modules/settings/data/repositories/settings_
 import 'package:flutter_boilerplate/modules/menu/data/models/restaurant_model.dart';
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_alert_dialog.dart';
 
 class SettingsController extends GetxController {
   final ThemeController _themeController;
@@ -18,22 +19,65 @@ class SettingsController extends GetxController {
     this._settingsRepository,
   );
 
-  // State for user profile
   final Rx<ResultState<Map<String, String>>> userProfileState =
       const ResultState<Map<String, String>>.initial().obs;
-  // State for restaurant
+
   final Rx<ResultState<RestaurantModel>> restaurantState =
       const ResultState<RestaurantModel>.initial().obs;
-  // State for update user
+
   final Rx<ResultState<bool>> updateUserState =
       const ResultState<bool>.initial().obs;
-  // State for update restaurant
+
   final Rx<ResultState<bool>> updateRestaurantState =
       const ResultState<bool>.initial().obs;
 
   final RxBool _isDarkTheme = false.obs;
   final RxString _currentLanguage = 'id'.obs;
   final RxBool _isLoggedIn = true.obs;
+
+  final RxBool isEditingRestaurant = false.obs;
+  final RxBool isLoadingRestaurant = false.obs;
+  final restaurantFormKey = GlobalKey<FormState>();
+  final nameCtrl = TextEditingController();
+  final addressCtrl = TextEditingController();
+  final descCtrl = TextEditingController();
+  final phoneCtrl = TextEditingController();
+
+  void startEditRestaurant(RestaurantModel data) {
+    isEditingRestaurant.value = true;
+    nameCtrl.text = data.name ?? '';
+    addressCtrl.text = data.address ?? '';
+    descCtrl.text = data.description ?? '';
+    phoneCtrl.text = data.phone ?? '';
+  }
+
+  void cancelEditRestaurant() {
+    isEditingRestaurant.value = false;
+  }
+
+  Future<void> saveRestaurant() async {
+    if (!(restaurantFormKey.currentState?.validate() ?? false)) return;
+    isLoadingRestaurant.value = true;
+    final body = {
+      'name': nameCtrl.text,
+      'address': addressCtrl.text,
+      'description': descCtrl.text,
+      'phone': phoneCtrl.text,
+    };
+    await updateRestaurant(body);
+    isLoadingRestaurant.value = false;
+    final state = updateRestaurantState.value;
+    if (state.successOrNull == true) {
+      isEditingRestaurant.value = false;
+      fetchRestaurant();
+      AppAlertDialog.showSuccess('Berhasil update data restoran');
+    } else if (state is ResultFailed) {
+      final msg = state.maybeWhen(failed: (m) => m, orElse: () => null);
+      AppAlertDialog.showError(AppUtils.getErrorMessage(null) ??
+          msg ??
+          'Gagal update data restoran');
+    }
+  }
 
   @override
   void onInit() {
@@ -154,7 +198,6 @@ class SettingsController extends GetxController {
     );
   }
 
-  // Getters for public access
   RxBool get isDarkTheme => _isDarkTheme;
   RxString get currentLanguage => _currentLanguage;
   RxBool get isLoggedIn => _isLoggedIn;

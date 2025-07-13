@@ -25,7 +25,6 @@ class AddMenuController extends GetxController {
   final _submitState = Rx<ResultState<bool>>(const ResultState.initial());
   String? _uploadedPhotoUrl;
 
-  // Getters
   GlobalKey<FormState> get formKey => _formKey;
   TextEditingController get nameController => _nameController;
   TextEditingController get categoryController => _categoryController;
