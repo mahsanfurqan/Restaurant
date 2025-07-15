@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/core/common/network_info.dart';
+import 'package:flutter_boilerplate/shared/utils/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/category_model.dart';
@@ -12,29 +14,18 @@ class AddMenuController extends GetxController {
 
   AddMenuController(this._repository);
 
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _categoryController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _priceController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final categoryController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final priceController = TextEditingController();
 
-  final _image = Rxn<dynamic>();
-  final _selectedCategory = Rxn<CategoryModel>();
-  final _categoryList = <CategoryModel>[].obs;
+  final image = Rxn<dynamic>();
+  final selectedCategory = Rxn<CategoryModel>();
+  final categoryList = <CategoryModel>[].obs;
 
-  final _submitState = Rx<ResultState<bool>>(const ResultState.initial());
-  String? _uploadedPhotoUrl;
-
-  GlobalKey<FormState> get formKey => _formKey;
-  TextEditingController get nameController => _nameController;
-  TextEditingController get categoryController => _categoryController;
-  TextEditingController get descriptionController => _descriptionController;
-  TextEditingController get priceController => _priceController;
-  Rxn<dynamic> get image => _image;
-  Rxn<CategoryModel> get selectedCategory => _selectedCategory;
-  List<CategoryModel> get categoryList => _categoryList;
-  ResultState<bool> get submitState => _submitState.value;
-  String? get uploadedPhotoUrl => _uploadedPhotoUrl;
+  final submitState = Rx<ResultState<bool>>(const ResultState.initial());
+  String? uploadedPhotoUrl;
 
   @override
   void onInit() {
@@ -55,37 +46,42 @@ class AddMenuController extends GetxController {
     result.fold(
       (failure) {
         final message = AppUtils.getErrorMessage(failure.error?.errors);
-        _uploadedPhotoUrl = null;
+        uploadedPhotoUrl = null;
         onFailed?.call(message ?? '');
       },
       (data) {
-        _uploadedPhotoUrl = data.data?.url ?? '';
+        uploadedPhotoUrl = data.data?.url ?? '';
         onSuccess?.call(data.data?.url ?? '');
       },
     );
   }
 
   Future<void> _fetchCategories() async {
-    final result = await _repository.fetchCategories();
+    final hasInternet = await Get.find<NetworkInfo>().isConnected;
+    if (!hasInternet) {
+      categoryList.assignAll([]);
+      return;
+    }
+    final result = await _repository.fetchCategories(forceRefresh: true);
     result.fold(
-      (failure) => _categoryList.assignAll([]),
-      (data) => _categoryList.assignAll(data),
+      (failure) => categoryList.assignAll([]),
+      (data) => categoryList.assignAll(data),
     );
   }
 
   bool get isFormValid =>
-      _image.value != null &&
-      _nameController.text.isNotEmpty &&
-      _selectedCategory.value != null &&
-      _priceController.text.isNotEmpty &&
-      double.tryParse(_priceController.text) != null;
+      image.value != null &&
+      nameController.text.isNotEmpty &&
+      selectedCategory.value != null &&
+      priceController.text.isNotEmpty &&
+      double.tryParse(priceController.text) != null;
 
   Future<void> submit({
     Function(String message)? onFailed,
     Function(bool success)? onSuccess,
   }) async {
-    if (_formKey.currentState?.validate() == false) return;
-    _submitState.value = const ResultState.loading();
+    if (formKey.currentState?.validate() == false) return;
+    submitState.value = const ResultState.loading();
 
     final restaurantId = Get.find<AuthController>().authState.value.maybeWhen(
           success: (data) => data.restaurantId,
@@ -93,40 +89,41 @@ class AddMenuController extends GetxController {
         );
 
     if (restaurantId == null) {
-      _submitState.value = const ResultState.failed("User tidak valid.");
-      onFailed?.call("User tidak valid.");
+      submitState.value =
+          ResultState.failed(AppLocalizations.restaurantNotFound());
+      onFailed?.call(AppLocalizations.restaurantNotFound());
       return;
     }
 
     final request = MenuRequestModel(
-      name: _nameController.text,
-      description: _descriptionController.text,
-      photoUrl: _uploadedPhotoUrl ?? '',
+      name: nameController.text,
+      description: descriptionController.text,
+      photoUrl: uploadedPhotoUrl ?? '',
       price: int.tryParse(
-              _priceController.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
+              priceController.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
           0,
       isAvailable: true,
-      categoryId: _selectedCategory.value?.id ?? 0,
+      categoryId: selectedCategory.value?.id ?? 0,
       restaurantId: restaurantId,
     );
 
     final result = await _repository.createMenu(request);
     result.fold((failure) {
       final message = AppUtils.getErrorMessage(failure.error?.errors);
-      _submitState.value = ResultState.failed(message);
+      submitState.value = ResultState.failed(message);
       onFailed?.call(message ?? '');
     }, (response) {
-      _submitState.value = const ResultState.success(true);
+      submitState.value = const ResultState.success(true);
       onSuccess?.call(true);
     });
   }
 
   @override
   void onClose() {
-    _nameController.dispose();
-    _categoryController.dispose();
-    _descriptionController.dispose();
-    _priceController.dispose();
+    nameController.dispose();
+    categoryController.dispose();
+    descriptionController.dispose();
+    priceController.dispose();
     super.onClose();
   }
 }

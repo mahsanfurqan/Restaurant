@@ -80,4 +80,20 @@ class AuthLocalDataSource {
       return false;
     }
   }
+
+  Future<TokenModel?> getTokenModelFromStorage() async {
+    final accessToken = await getAccessToken();
+    final refreshToken = await getRefreshToken();
+    final authSession = await getAuthSession();
+    if (accessToken != null &&
+        refreshToken != null &&
+        authSession != null &&
+        authSession.username != null) {
+      return TokenModel(
+          email: authSession.username!,
+          accessToken: accessToken,
+          refreshToken: refreshToken);
+    }
+    return null;
+  }
 }

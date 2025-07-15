@@ -93,10 +93,10 @@ class AppBinding extends Bindings {
     Get.lazyPut<ThemeLocalDataSource>(() => ThemeLocalDataSource(Get.find()));
 
     // Repositories
-    Get.put<AuthRepository>(
-        AuthRepository(Get.find(), Get.find(), Get.find(), Get.find()));
+    Get.put<AuthRepository>(AuthRepository(
+        Get.find(), Get.find(), Get.find(), Get.find(), Get.find()));
     Get.put<NoteRepository>(NoteRepository(Get.find(), Get.find()));
-    Get.put<MenuRepository>(MenuRepository(Get.find(), Get.find()));
+    Get.put<MenuRepository>(MenuRepository(Get.find(), Get.find(), Get.find()));
     Get.put<SocketRepository>(SocketRepository(Get.find()));
     Get.put<LocalizationRepository>(LocalizationRepository(Get.find()));
     Get.put<ThemeRepository>(ThemeRepository(Get.find()));

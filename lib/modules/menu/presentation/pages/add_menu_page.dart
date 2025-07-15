@@ -117,9 +117,8 @@ class AddMenuPage extends GetView<AddMenuController> {
                       BottomSheetHelper.showError(message);
                     },
                     onSuccess: (data) async {
-                      AlertDialogHelper.showSuccess(
+                      await AlertDialogHelper.showSuccess(
                           AppLocalizations.createMenuSuccessMessage());
-                      await Future.delayed(const Duration(milliseconds: 300));
                       Get.back(result: true);
                     },
                   ),

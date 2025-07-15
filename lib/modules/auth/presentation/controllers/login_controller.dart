@@ -21,10 +21,8 @@ class LoginController extends GetxController {
   }
 
   final formKey = GlobalKey<FormState>();
-
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
-
   final loginState =
       Rx<ResultState<BaseResponse<TokenModel>>>(const ResultState.initial());
 

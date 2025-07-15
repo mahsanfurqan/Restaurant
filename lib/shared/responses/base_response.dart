@@ -15,5 +15,10 @@ class BaseResponse<T> with _$BaseResponse<T> {
     Map<String, dynamic> json,
     T Function(Object?) fromJsonT,
   ) =>
-      _$BaseResponseFromJson<T>(json, fromJsonT);
+      BaseResponse(
+        data: json['data'] == null ? null : fromJsonT(json['data']),
+        meta: json['meta'] == null
+            ? null
+            : MetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
+      );
 }

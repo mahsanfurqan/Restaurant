@@ -21,7 +21,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
       appBar: AppBar(
         title: Text(AppLocalizations.lihatMenuTitle()),
         actions: [
-          Obx(() => controller.isOfflineMode
+          Obx(() => controller.isOfflineMode.value
               ? Container(
                   margin: const EdgeInsets.only(right: 16),
                   padding:
@@ -53,7 +53,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
           localizationCtrl.currentLocale.value;
           final state = controller.menuState;
 
-          return state.when(
+          return state.value.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             success: (menus) => menus.isEmpty
                 ? Center(
@@ -73,7 +73,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                             color: Colors.grey[600],
                           ),
                         ),
-                        if (controller.isOfflineMode) ...[
+                        if (controller.isOfflineMode.value) ...[
                           const SizedBox(height: 8),
                           Text(
                             'Data dari cache',
@@ -89,7 +89,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                 : Column(
                     children: [
                       // Offline banner
-                      if (controller.isOfflineMode)
+                      if (controller.isOfflineMode.value)
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(
@@ -107,7 +107,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  'Menampilkan data dari cache (mode offline)',
+                                  AppLocalizations.offline(),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.orange,
@@ -117,7 +117,7 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                               TextButton(
                                 onPressed: controller.refreshMenu,
                                 child: Text(
-                                  'Refresh',
+                                  AppLocalizations.refreshing(),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.orange,
@@ -193,21 +193,6 @@ class ViewMenuPage extends GetView<ViewMenuController> {
                     text: AppLocalizations.retry(),
                     backgroundColor: AppColors.green,
                   ),
-                  if (controller.hasCachedData) ...[
-                    const SizedBox(height: 8),
-                    TextButton(
-                      onPressed: () {
-                        controller.loadCachedMenus();
-                      },
-                      child: Text(
-                        'Tampilkan data cache',
-                        style: TextStyle(
-                          color: Colors.orange,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),

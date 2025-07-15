@@ -212,6 +212,32 @@ class MockMenuRemoteDataSource extends _i1.Mock
           ),
         )),
       ) as _i5.Future<_i3.BaseResponse<_i10.RestaurantModel>>);
+
+  @override
+  _i5.Future<_i3.BaseResponse<_i7.MenuModel>> updateMenu(
+    int? id,
+    _i8.MenuRequestModel? request,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateMenu,
+          [
+            id,
+            request,
+          ],
+        ),
+        returnValue: _i5.Future<_i3.BaseResponse<_i7.MenuModel>>.value(
+            _FakeBaseResponse_1<_i7.MenuModel>(
+          this,
+          Invocation.method(
+            #updateMenu,
+            [
+              id,
+              request,
+            ],
+          ),
+        )),
+      ) as _i5.Future<_i3.BaseResponse<_i7.MenuModel>>);
 }
 
 /// A class which mocks [MenuLocalDataSource].

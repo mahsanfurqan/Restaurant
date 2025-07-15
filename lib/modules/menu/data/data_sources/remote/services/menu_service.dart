@@ -32,4 +32,10 @@ abstract class MenuService {
     @Path('id') int id,
     @Body() Map<String, dynamic> body,
   );
+
+  @PATCH('/menus/{id}')
+  Future<BaseResponse<MenuModel>> updateMenu(
+    @Path('id') int id,
+    @Body() MenuRequestModel request,
+  );
 }

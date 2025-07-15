@@ -4,6 +4,7 @@ import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/shared/styles/app_fonts.dart';
 import 'package:flutter_boilerplate/shared/styles/app_colors.dart';
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_skeletonizer.dart';
 
 class MenuListItem extends StatelessWidget {
   final MenuModel menu;
@@ -38,12 +39,22 @@ class MenuListItem extends StatelessWidget {
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return AppSkeletonizer(
+                            enabled: true,
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                            ),
+                          );
+                        },
                       )
-                    : Image.asset(
-                        'assets/images/load.jpg',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
+                    : AppSkeletonizer(
+                        enabled: true,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
               ),
               const SizedBox(width: 12),
@@ -52,7 +63,7 @@ class MenuListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      menu.name,
+                      menu.name ?? "",
                       style: AppFonts.lgBold,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -66,7 +77,7 @@ class MenuListItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              if (menu.category.name != null)
+              if (menu.category?.name != null)
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

@@ -16,18 +16,21 @@ import 'package:flutter_boilerplate/modules/auth/data/models/register_request_mo
 import 'package:flutter_boilerplate/modules/auth/data/models/refresh_token_dto.dart';
 import 'package:flutter_boilerplate/shared/responses/base_error_response.dart';
 import 'package:flutter_boilerplate/shared/responses/base_response.dart';
+import 'package:flutter_boilerplate/core/common/network_info.dart';
 
 class AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
   final AuthLocalDataSource _localDataSource;
   final UserRemoteDataSource _userRemoteDataSource;
   final TokenManager _tokenManager;
+  final NetworkInfo _networkInfo;
 
   const AuthRepository(
     this._remoteDataSource,
     this._localDataSource,
     this._userRemoteDataSource,
     this._tokenManager,
+    this._networkInfo,
   );
 
   Future<Either<Failure, UserModel>> getActiveUser() async {
@@ -47,9 +50,27 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure, BaseResponse<TokenModel>>> login(
-      LoginDto payload) async {
+  Future<Either<Failure, BaseResponse<TokenModel>>> login(LoginDto payload,
+      {bool forceOnline = false}) async {
     try {
+      final hasInternet = await _networkInfo.isConnected;
+      if (!forceOnline && !hasInternet) {
+        // Tidak ada internet, cek session lokal
+        final authSession = await _localDataSource.getAuthSession();
+        final accessToken = await _localDataSource.getAccessToken();
+        if (authSession != null &&
+            accessToken != null &&
+            !_tokenManager.isTokenExpired(accessToken)) {
+          final tokenModel = await _localDataSource.getTokenModelFromStorage();
+          if (tokenModel != null) {
+            return Right(BaseResponse<TokenModel>(data: tokenModel));
+          } else {
+            return const Left(AuthFailure());
+          }
+        } else {
+          return const Left(AuthFailure());
+        }
+      }
       final result = await _remoteDataSource.login(payload);
       if (result.data != null) {
         await _localDataSource.setToken(result.data!);
@@ -63,6 +84,7 @@ class AuthRepository {
   Future<Either<Failure, AuthValidateModel>> quickAuthCheck() async {
     try {
       final authSession = await _localDataSource.getAuthSession();
+
       if (authSession == null) {
         return const Left(AuthFailure());
       }
@@ -148,26 +170,35 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure, AuthValidateModel>> getUserFromToken() async {
+  Future<Either<Failure, AuthValidateModel>> getUserFromToken(
+      {bool forceOnline = false}) async {
     try {
       final accessToken = await _localDataSource.getAccessToken();
       if (accessToken == null) {
         await _localDataSource.clearSession();
         return const Left(AuthFailure());
       }
-
       if (_tokenManager.isTokenExpired(accessToken)) {
         await _localDataSource.clearSession();
         return const Left(AuthFailure());
       }
-
+      final hasInternet = await _networkInfo.isConnected;
+      if (!forceOnline && !hasInternet) {
+        // Tidak ada internet, gunakan session lokal
+        final authSession = await _localDataSource.getAuthSession();
+        if (authSession != null) {
+          return Right(authSession);
+        } else {
+          await _localDataSource.clearSession();
+          return const Left(AuthFailure());
+        }
+      }
       final result = await _remoteDataSource.getUserFromToken();
       final data = result.data;
       if (data == null) {
         await _localDataSource.clearSession();
         return const Left(AuthFailure());
       }
-
       await _localDataSource.setAuthSession(data);
       return Right(data);
     } catch (_) {

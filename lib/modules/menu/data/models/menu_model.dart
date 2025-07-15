@@ -10,13 +10,13 @@ part 'generated/menu_model.g.dart';
 class MenuModel with _$MenuModel {
   const factory MenuModel({
     required int id,
-    required String createdAt,
-    required String name,
-    required String description,
-    required int price,
-    required bool isAvailable,
-    @JsonKey(name: 'category') required CategoryModel category,
-    @JsonKey(defaultValue: '') required String photoUrl,
+    String? createdAt,
+    String? name,
+    String? description,
+    int? price,
+    bool? isAvailable,
+    @JsonKey(name: 'category') CategoryModel? category,
+    @JsonKey(defaultValue: '') String? photoUrl,
   }) = _MenuModel;
 
   factory MenuModel.fromJson(Map<String, dynamic> json) =>
@@ -47,7 +47,7 @@ extension MenuModelExt on MenuModel {
       description: description,
       price: price,
       isAvailable: isAvailable,
-      categoryId: category.id,
+      categoryId: category?.id ?? 0,
       photoUrl: photoUrl,
     );
   }

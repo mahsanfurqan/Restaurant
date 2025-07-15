@@ -60,4 +60,8 @@ class MenuRemoteDataSource {
       int id, Map<String, dynamic> body) {
     return _service.updateRestaurant(id, body);
   }
+
+  Future<BaseResponse<MenuModel>> updateMenu(int id, MenuRequestModel request) {
+    return _service.updateMenu(id, request);
+  }
 }

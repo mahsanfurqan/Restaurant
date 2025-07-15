@@ -1,22 +1,21 @@
+import 'package:flutter_boilerplate/modules/menu/data/models/menu_request_model.dart';
+import 'package:flutter_boilerplate/shared/widgets/app_alert_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter_boilerplate/modules/menu/data/models/menu_model.dart';
 import 'package:flutter_boilerplate/modules/menu/data/repositories/menu_repository.dart';
 import 'package:flutter_boilerplate/shared/utils/result_state/result_state.dart';
 import 'package:flutter_boilerplate/shared/utils/app_utils.dart';
+import 'package:flutter/material.dart';
 
 class ViewMenuController extends GetxController {
   final MenuRepository _repository;
 
   ViewMenuController(this._repository);
 
-  final _menuState =
+  final menuState =
       Rx<ResultState<List<MenuModel>>>(const ResultState.initial());
-  final _isOfflineMode = false.obs;
-  final _hasCachedData = false.obs;
-
-  ResultState<List<MenuModel>> get menuState => _menuState.value;
-  bool get isOfflineMode => _isOfflineMode.value;
-  bool get hasCachedData => _hasCachedData.value;
+  final isOfflineMode = false.obs;
+  final hasCachedData = false.obs;
 
   @override
   void onInit() {
@@ -25,79 +24,39 @@ class ViewMenuController extends GetxController {
   }
 
   Future<void> fetchMenus() async {
-    _menuState.value = const ResultState.loading();
+    menuState.value = const ResultState.loading();
 
     final result = await _repository.fetchMenus();
-
     result.fold(
       (failure) {
-        _checkCachedData().then((hasCache) {
-          if (hasCache) {
-            _isOfflineMode.value = true;
-            _hasCachedData.value = true;
-            _loadCachedMenus();
-          } else {
-            _isOfflineMode.value = false;
-            _hasCachedData.value = false;
-            final message = AppUtils.getErrorMessage(failure.error?.errors);
-            _menuState.value =
-                ResultState.failed(message ?? 'Gagal memuat menu');
-          }
-        });
+        isOfflineMode.value = true;
+        hasCachedData.value = false;
+        final message = AppUtils.getErrorMessage(failure.error?.errors);
+        menuState.value = ResultState.failed(message ?? 'Gagal memuat menu');
       },
       (menus) {
-        _isOfflineMode.value = false;
-        _hasCachedData.value = false;
-        _menuState.value = ResultState.success(menus);
+        isOfflineMode.value = false;
+        hasCachedData.value = false;
+        menuState.value = ResultState.success(menus);
       },
     );
   }
 
   Future<void> refreshMenu() async {
     final result = await _repository.refreshMenus();
-
     result.fold(
       (failure) {
-        _checkCachedData().then((hasCache) {
-          if (hasCache) {
-            _isOfflineMode.value = true;
-            _hasCachedData.value = true;
-            _loadCachedMenus();
-          } else {
-            _isOfflineMode.value = false;
-            _hasCachedData.value = false;
-            final message = AppUtils.getErrorMessage(failure.error?.errors);
-            _menuState.value =
-                ResultState.failed(message ?? 'Gagal memuat menu');
-          }
-        });
+        isOfflineMode.value = true;
+        hasCachedData.value = false;
+        final message = AppUtils.getErrorMessage(failure.error?.errors);
+        menuState.value = ResultState.failed(message ?? 'Gagal memuat menu');
       },
       (menus) {
-        _isOfflineMode.value = false;
-        _hasCachedData.value = false;
-        _menuState.value = ResultState.success(menus);
+        isOfflineMode.value = false;
+        hasCachedData.value = false;
+        menuState.value = ResultState.success(menus);
       },
     );
-  }
-
-  Future<bool> _checkCachedData() async {
-    return await _repository.hasCachedData();
-  }
-
-  Future<void> _loadCachedMenus() async {
-    final result = await _repository.fetchMenus();
-    result.fold(
-      (failure) {
-        _menuState.value = ResultState.failed('Tidak ada data tersimpan');
-      },
-      (menus) {
-        _menuState.value = ResultState.success(menus);
-      },
-    );
-  }
-
-  Future<void> loadCachedMenus() async {
-    await _loadCachedMenus();
   }
 
   Future<bool> deleteMenu(int id) async {
@@ -107,9 +66,47 @@ class ViewMenuController extends GetxController {
 
   Future<void> clearCache() async {
     await _repository.clearCache();
-    _hasCachedData.value = false;
+    hasCachedData.value = false;
   }
 
-  bool get isCurrentlyOffline => _isOfflineMode.value;
-  bool get hasCachedDataAvailable => _hasCachedData.value;
+  bool get isCurrentlyOffline => isOfflineMode.value;
+  bool get hasCachedDataAvailable => hasCachedData.value;
+  Future<ResultState<bool>> editMenuWithResult(
+    int id,
+    MenuRequestModel request,
+  ) async {
+    final result = await _repository.updateMenu(id, request);
+
+    return result.fold(
+      (failure) {
+        final msg = AppUtils.getErrorMessage(failure.error?.errors);
+        return ResultState.failed(msg ?? 'Gagal mengedit menu');
+      },
+      (res) {
+        fetchMenus();
+        return const ResultState.success(true);
+      },
+    );
+  }
+
+  Future<ResultState<bool>> editMenuFromFields({
+    required int menuId,
+    required TextEditingController nameCtrl,
+    required TextEditingController priceCtrl,
+    required TextEditingController descCtrl,
+    required MenuModel menu,
+    required int restaurantId,
+  }) async {
+    final request = MenuRequestModel(
+      name: nameCtrl.text.trim(),
+      description: descCtrl.text.trim(),
+      photoUrl: menu.photoUrl ?? '',
+      price:
+          int.tryParse(priceCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+      isAvailable: true,
+      categoryId: menu.category!.id,
+      restaurantId: restaurantId,
+    );
+    return await editMenuWithResult(menuId, request);
+  }
 }

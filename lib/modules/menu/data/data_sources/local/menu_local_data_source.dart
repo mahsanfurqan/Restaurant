@@ -40,7 +40,7 @@ class MenuLocalDataSource {
       final menuEntities = <MenuEntity>[];
 
       for (var menu in menus) {
-        categories.add(menu.category);
+        categories.add(menu.category!);
         menuEntities.add(menu.toEntity());
       }
 

@@ -251,6 +251,35 @@ class MockMenuRepository extends _i1.Mock implements _i3.MenuRepository {
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i8.MenuModel>>>);
 
   @override
+  _i4.Future<
+      _i2.Either<_i5.Failure, _i7.BaseResponse<_i8.MenuModel>>> updateMenu(
+    int? id,
+    _i9.MenuRequestModel? request,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateMenu,
+          [
+            id,
+            request,
+          ],
+        ),
+        returnValue: _i4.Future<
+                _i2.Either<_i5.Failure, _i7.BaseResponse<_i8.MenuModel>>>.value(
+            _FakeEither_0<_i5.Failure, _i7.BaseResponse<_i8.MenuModel>>(
+          this,
+          Invocation.method(
+            #updateMenu,
+            [
+              id,
+              request,
+            ],
+          ),
+        )),
+      ) as _i4
+          .Future<_i2.Either<_i5.Failure, _i7.BaseResponse<_i8.MenuModel>>>);
+
+  @override
   _i4.Future<bool> hasCachedData() => (super.noSuchMethod(
         Invocation.method(
           #hasCachedData,
