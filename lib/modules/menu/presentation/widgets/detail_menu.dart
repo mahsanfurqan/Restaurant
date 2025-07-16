@@ -294,7 +294,7 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
         if (mounted) Get.back(result: true);
       },
       failed: (message) {
-        BottomSheetHelper.showError(message ?? 'Gagal menyimpan perubahan');
+        BottomSheetHelper.showError(message ?? AppLocalizations.loadFailed());
       },
       orElse: () {},
     );
