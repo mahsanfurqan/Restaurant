@@ -312,30 +312,31 @@ class _EditMenuDialogState extends State<EditMenuDialog> {
             AppInput(
               controller: nameCtrl,
               hintText: AppLocalizations.menuNameLabel(),
-              validator: (v) => v == null || v.isEmpty
-                  ? AppLocalizations.menuNameRequired()
-                  : null,
+              validator: FormBuilderValidators.required(
+                errorText: AppLocalizations.menuNameRequired(),
+              ),
             ),
             const SizedBox(height: 8),
             AppInput(
               controller: priceCtrl,
               hintText: AppLocalizations.priceLabel(),
               keyboardType: TextInputType.number,
-              validator: (v) {
-                if (v == null || v.isEmpty)
-                  return AppLocalizations.priceRequired();
-                if (double.tryParse(v) == null)
-                  return AppLocalizations.priceMustBeNumber();
-                return null;
-              },
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(
+                  errorText: AppLocalizations.priceRequired(),
+                ),
+                FormBuilderValidators.numeric(
+                  errorText: AppLocalizations.priceMustBeNumber(),
+                ),
+              ]),
             ),
             const SizedBox(height: 8),
             AppInput(
               controller: descCtrl,
               hintText: AppLocalizations.descriptionLabel(),
-              validator: (v) => v == null || v.isEmpty
-                  ? AppLocalizations.description()
-                  : null,
+              validator: FormBuilderValidators.required(
+                errorText: AppLocalizations.description(),
+              ),
             ),
             Obx(() {
               final state = _editState.value;
